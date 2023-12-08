@@ -14,7 +14,7 @@
 #include "OSXFont.h"
 #include "OSXPath.h"
 
-OSXFont::OSXFont(ARA::Application& app, CTFontRef handle):
+OSXFont::OSXFont(ARA::Application& app, NSFont* handle):
 ARA::Font(app), mHandle(handle)
 {
     
@@ -22,12 +22,12 @@ ARA::Font(app), mHandle(handle)
 
 OSXFont::~OSXFont()
 {
-    CFRelease(mHandle);
+    
 }
 
 std::string OSXFont::familyName() const
 {
-    CFStringRef name = CTFontCopyFamilyName(mHandle);
+    CFStringRef name = CTFontCopyFamilyName((CTFontRef)mHandle);
     
     std::string str = [(NSString*)name UTF8String];
     
@@ -38,19 +38,19 @@ std::string OSXFont::familyName() const
 
 ARA::Real OSXFont::size() const
 {
-    return CTFontGetSize(mHandle);
+    return CTFontGetSize((CTFontRef)mHandle);
 }
 
 ARA::Font::TraitsMask OSXFont::traits() const
 {
-    CTFontSymbolicTraits traits = CTFontGetSymbolicTraits(mHandle);
-    TraitsMask mask = 0;
+    CTFontSymbolicTraits traits = CTFontGetSymbolicTraits((CTFontRef)mHandle);
+    int mask = 0;
     
     if (traits & kCTFontTraitBold) mask |= Bold;
     if (traits & kCTFontTraitItalic) mask |= Italic;
     if (traits & kCTFontTraitCondensed) mask |= Condensed;
     
-    return mask;
+    return (ARA::Font::TraitsMask) mask;
 }
 
 ARA::Charset OSXFont::charset() const
@@ -62,7 +62,7 @@ ARA::GlyphIndex OSXFont::glyphIndex(ARA::Char32 character) const
 {
     CGGlyph index = 0;
     
-    if (!CTFontGetGlyphsForCharacters(mHandle, (UniChar*)&character, &index, 1))
+    if (!CTFontGetGlyphsForCharacters((CTFontRef)mHandle, (UniChar*)&character, &index, 1))
         throw CTFontError("[OSXFont] CTFontGetGlyphsForCharacters() failed.");
     
     return (ARA::GlyphIndex) index;
@@ -77,26 +77,30 @@ ARA::GlyphInfo OSXFont::glyphInfo(ARA::GlyphIndex index) const
     
     ARA::GlyphInfo infos;
     
-    infos.name = [(__bridge_retained NSString*)CTFontCopyNameForGlyph(mHandle, (CGGlyph)index) UTF8String];
+    infos.name = [(NSString*)CTFontCopyNameForGlyph((CTFontRef)mHandle, (CGGlyph)index) UTF8String];
     
     CGRect boundingRect;
     CGSize advance;
     CGPathRef path;
     CGMutablePathRef ppath;
     
-    CTFontGetBoundingRectsForGlyphs(mHandle, kCTFontOrientationDefault, (CGGlyph*)&index, &boundingRect);
-    CTFontGetAdvancesForGlyphs(mHandle, kCTFontOrientationDefault, (CGGlyph*)&index, &advance);
-    path = CTFontCreatePathForGlyph(mHandle, (CGGlyph)index, NULL);
-    ppath = CGPathCreateMutableCopy(ppath);
+    CTFontGetBoundingRectsForGlyphs((CTFontRef)mHandle, kCTFontOrientationDefault, (CGGlyph*)&index, &boundingRect, 1);
+    CTFontGetAdvancesForGlyphs((CTFontRef)mHandle, kCTFontOrientationDefault, (CGGlyph*)&index, &advance, 1);
+    path = CTFontCreatePathForGlyph((CTFontRef)mHandle, (CGGlyph)index, NULL);
+    CGAffineTransform transform = CGAffineTransformMakeScale(1, -1);
+    if (path)
+        ppath = CGPathCreateMutableCopyByTransformingPath(path, &transform);
     
     infos.size.width = boundingRect.size.width;
     infos.size.height = boundingRect.size.height;
     infos.advance.width = advance.width;
     infos.advance.height = advance.height;
-    infos.path = ARA::MakePtr<OSXPath>(application(), ppath);
     
-    CFRelease(path);
-    CFRelease(ppath);
+    if (path)
+    {
+        infos.path = ARA::MakePtr<OSXPath>(const_cast<ARA::Application&>(application()), (CGMutablePathRef) ppath);
+        CFRelease(path);
+    }
     
     mGlyphInfos[index] = infos;
     return infos;

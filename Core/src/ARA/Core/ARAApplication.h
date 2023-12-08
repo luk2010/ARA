@@ -96,11 +96,11 @@ public:
     
     //! @brief
     //! Creates a native view.
-    virtual Ptr<View> createView() const = 0;
+    virtual Ptr<View> createView() = 0;
     
     //! @brief
     //! Creates a native Path from an origin point.
-    virtual Ptr<Path> createPath(const Point2& origin = { 0, 0 }) const = 0;
+    virtual Ptr<Path> createPath(const Point2& origin = { 0, 0 }) = 0;
     
     //! @brief
     //! Creates a new font.
@@ -114,7 +114,7 @@ public:
     //!
     //! @return
     //! A font instance if the font is found, nullptr otherwise.
-    virtual Ptr<Font> createFont(std::string_view familyName, Real size, Font::TraitsMask traits = (Font::TraitsMask)0) const = 0;
+    virtual Ptr<Font> createFont(std::string_view familyName, Real size, Font::TraitsMask traits = (Font::TraitsMask)0) = 0;
 };
 
 ARA_END_NAMESPACE

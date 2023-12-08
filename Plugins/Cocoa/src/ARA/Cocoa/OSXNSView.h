@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //! @file
-//!     ARA/Cocoa/ARACocoaPlugin.h
+//!     ARA/Cocoa/OSXNSView.h
 //! @date
 //!     2023/12/08
 //! @author
@@ -11,11 +11,20 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "ARA/Core/ARAPlatform.h"
-#include "ARA/Core/ARAApplication.h"
-#include "ARACocoaApplication.h"
+#ifndef __ARA_COCOA_OSXNSVIEW_H__
+#define __ARA_COCOA_OSXNSVIEW_H__
 
-extern "C" ARA::Ptr<ARA::Application> PluginLoad(void)
+#include "OSXView.h"
+
+@interface OSXNSView : NSView
 {
-    return ARA::MakePtr<OSXApplication>();
+    OSXView* view;
 }
+
+- (instancetype) initWithView:(OSXView*)view;
+
+- (void) setView:(OSXView*)view;
+
+@end 
+
+#endif

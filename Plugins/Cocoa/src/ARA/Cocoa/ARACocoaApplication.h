@@ -57,12 +57,12 @@ public:
     //! @brief
     //! Creates a native view.
     //!
-    virtual ARA::Ptr<ARA::View> createView() const;
+    virtual ARA::Ptr<ARA::View> createView();
     
     //! @brief
     //! Creates a native Path from an origin point.
     //!
-    virtual ARA::Ptr<ARA::Path> createPath(const ARA::Point2& origin) const;
+    virtual ARA::Ptr<ARA::Path> createPath(const ARA::Point2& origin);
     
     //! @brief
     //! Creates a new font.
@@ -77,7 +77,7 @@ public:
     //! @return
     //! A font instance if the font is found, nullptr otherwise.
     //! 
-    virtual ARA::Ptr<ARA::Font> createFont(std::string_view familyName, ARA::Real size, ARA::Font::TraitsMask traits) const;
+    virtual ARA::Ptr<ARA::Font> createFont(std::string_view familyName, ARA::Real size, ARA::Font::TraitsMask traits);
 };
 
 #endif

@@ -15,7 +15,8 @@ ARA_BEGIN_NAMESPACE
 
 //! @brief
 //! A Window common class.
-class Window : public ApplicationObject
+class Window : public ApplicationObject,
+               public std::enable_shared_from_this<Window>
 {
 public:
     

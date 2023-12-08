@@ -97,7 +97,7 @@ public:
     {
         if (mData.empty())
             return 0;
-        return mData.size() - 1;
+        return mData.size();
     }
     
     //! @brief
@@ -123,7 +123,7 @@ public:
     inline CharAttributes& attributesAt(size_t index)
     {
         if (length() <= index)
-            throw StringError("[ARA::Text::String] Invalid index ", index, ".");
+            throw StringError("[ARA::Text::String] Invalid index ", index, "/", mAttributes.size(), ".");
         return mAttributes[index];
     }
     
@@ -132,7 +132,7 @@ public:
     inline const CharAttributes& attributesAt(size_t index) const
     {
         if (length() <= index)
-            throw StringError("[ARA::Text::String] Invalid index ", index, ".");
+            throw StringError("[ARA::Text::String] Invalid index ", index, "/", mAttributes.size(), ".");
         return mAttributes[index];
     }
     

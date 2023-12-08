@@ -22,8 +22,8 @@ constexpr Color Black = { 0, 0, 0, 1 };
 Frame::Frame(const String& string, const Rect2& rect, const ParagraphAttributes& defaultAttribs):
 mDefAttributes(defaultAttribs)
 {
-    mString = string;
-    mRect = rect;
+    setFrame(rect);
+    insert(0, string);
 }
 
 void Frame::insert(size_t index, const String& string)
@@ -71,6 +71,10 @@ void Frame::insert(size_t index, const String& string)
             Paragraph paragraph(mString);
             
             paragraph.needsLayout = true;
+            paragraph.alignment = mDefAttributes.alignment.value_or(Alignment::Left);
+            paragraph.lineBreakMode = mDefAttributes.lineBreakMode.value_or(LineBreakMode::Letter);
+            paragraph.indentation = mDefAttributes.indentation.value_or(0.0);
+            paragraph.interline = mDefAttributes.interline.value_or(0.0);
             paragraph.range =
             {
                 .start = paragraphsRanges[rangeIndex].start + startOfRanges,
@@ -260,20 +264,29 @@ void Frame::drawParagraph(Drawer& drawer, const Point2& origin, const Paragraph&
 
         for (auto& run : line.runs())
         {
-            if (run.origin().x + run.advance().width >= mRect.maxX())
+            if (run.origin().x + run.advance().width > mRect.maxX())
                 break;
 
             drawer.setFillColor(run.attributes().color.value_or(Black));
+            
+            Point2 pt =
+            {
+                .x = origin.x + run.origin().x,
+                .y = origin.y + line.origin().y + line.height()
+            };
 
             for (auto& info : run.glyphInfos()) 
             {
-                Point2 pt = 
-                {
-                    .x = origin.x + run.origin().x,
-                    .y = origin.y + line.origin().y + line.height()
-                };
-                drawer.moveTo(pt);
-                drawer.fillPath(info.path);
+                drawer.push();
+                
+                drawer.translate(pt);
+                if (info.path)
+                    drawer.fillPath(info.path);
+                
+                pt.x += info.advance.width;
+                pt.y += info.advance.height;
+                
+                drawer.pop();
             }
         }
     }
@@ -294,7 +307,7 @@ void Frame::layout()
         if (paragraph.needsLayout)
             layoutParagraph(paragraph);
         
-        const Line& lastLine = (*paragraph.lines.rend());
+        const Line& lastLine = (*paragraph.lines.rbegin());
         origin.y += lastLine.origin().y + lastLine.height();
         origin.y += mParagraphGap;
     }
@@ -393,6 +406,9 @@ void Frame::layoutParagraph(Paragraph& paragraph)
         }
     }
     
+    if (line.runs().size() > 0)
+        lines.push_back(line);
+    
     // Now we must layout each line depending on the paragraph alignment.
     
     for (auto& line : lines)
@@ -408,7 +424,7 @@ void Frame::layoutParagraph(Paragraph& paragraph)
     if (!paragraph.lines.empty()) 
     {
         auto const& lastLine = (*paragraph.lines.rbegin());
-        paragraph.size.height = mRect.size.height - (lastLine.origin().y + lastLine.height());
+        paragraph.size.height = (lastLine.origin().y + lastLine.height()) - paragraph.origin.y;
     }
 }
 
@@ -496,7 +512,10 @@ void Frame::setParagraphGap(Real space)
 
 bool Frame::needsLayout() const 
 {
-    for (const Paragraph& paragraph : mParagraphs) 
+    if (mParagraphs.empty() && mString.length() > 0)
+        return true;
+    
+    for (const Paragraph& paragraph : mParagraphs)
     {
         if (paragraph.needsLayout) 
             return true; 

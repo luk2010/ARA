@@ -59,7 +59,7 @@ public:
     //! @brief 
     //! Makes a hit test on the text frame and calls the function `onClick`. 
     //! 
-    virtual void onMouseDown(View& view, MouseButton button, const Point2& location);
+    virtual void onViewMouseDown(View& view, MouseButton button, const Point2& location);
 
     //! @brief 
     //! Sets the text padding. 

@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //! @file
-//!     ARA/Cocoa/ARACocoaPlugin.h
+//!     ARA/Cocoa/ARAView.cpp
 //! @date
 //!     2023/12/08
 //! @author
@@ -11,11 +11,19 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "ARA/Core/ARAPlatform.h"
-#include "ARA/Core/ARAApplication.h"
-#include "ARACocoaApplication.h"
+#include "ARAView.h"
 
-extern "C" ARA::Ptr<ARA::Application> PluginLoad(void)
+ARA_BEGIN_NAMESPACE
+
+void View::update()
 {
-    return ARA::MakePtr<OSXApplication>();
+    auto controller = observer();
+    
+    if (controller)
+        controller->onViewUpdate(*this);
+    
+    for (auto& child : mChildrenNodes)
+        child->update();
 }
+
+ARA_END_NAMESPACE

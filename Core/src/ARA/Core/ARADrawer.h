@@ -55,6 +55,16 @@ public:
     //! Moves the cursor to the given point.
     //! 
     virtual void moveTo(const Point2& point) = 0;
+    
+    //! @brief
+    //! Translates the Current Transformation Matrix by given point.
+    //!
+    virtual void translate(const ARA::Point2& p) = 0;
+    
+    //! @brief
+    //! Scales the Current Transformation Matrix by given point.
+    //!
+    virtual void scale(const ARA::Point2& p) = 0;
 };
 
 ARA_END_NAMESPACE

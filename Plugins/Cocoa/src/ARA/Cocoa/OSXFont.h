@@ -16,6 +16,7 @@
 
 #include "ARACocoaPlatform.h"
 #include "ARA/Core/ARAFont.h"
+#include "ARA/Core/ARAError.h"
 
 ARA_DECLARE_ERROR(CTFontError)
 
@@ -27,7 +28,7 @@ class OSXFont : public ARA::Font
     //! @brief
     //! The Core Text font handle.
     //!
-    CTFontRef mHandle;
+    NSFont* mHandle;
     
     //! @brief
     //! A cache for already loaded GlyphInfos.
@@ -39,7 +40,7 @@ public:
     //! @brief
     //! Wraps a CTFontRef object.
     //!
-    OSXFont(ARA::Application& app, CTFontRef handle);
+    OSXFont(ARA::Application& app, NSFont* handle);
     
     //! @brief
     //! Destroys the font.

@@ -120,7 +120,7 @@ Rect2 Element::backgroundRect(const View& view) const
 Ptr<Path> Element::borderPath(const View& view, RectEdge edge) const
 {
     Rect2 bkgRect = backgroundRect(view);
-    Ptr<Path> path = view.application().createPath(bkgRect.origin);
+    Ptr<Path> path = Application::Get().createPath(bkgRect.origin);
     
     Real cornerRadii[4] =
     {
@@ -141,10 +141,10 @@ std::array<Ptr<Path>, 4> Element::borderPathes(const View& view) const
     
     std::array<Ptr<Path>, 4> pathes =
     {
-        view.application().createPath(),
-        view.application().createPath(),
-        view.application().createPath(),
-        view.application().createPath()
+        Application::Get().createPath(),
+        Application::Get().createPath(),
+        Application::Get().createPath(),
+        Application::Get().createPath()
     };
     
     Real cornerRadii[4] =

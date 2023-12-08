@@ -78,6 +78,16 @@ protected:
     //! The view observer.
     Weak<Observer> mObserver;
     
+    //! @brief
+    //! Internally sets the parent node.
+    //!
+    inline void setParentView(const Ptr<View>& view) { mParentNode = view; }
+    
+    //! @brief
+    //! Internally sets the parent node of another view.
+    //!
+    inline void setParentView(View& ref, const Ptr<View>& view) { ref.setParentView(view); }
+    
 public:
     
     //! @brief
@@ -135,6 +145,11 @@ public:
     //! @brief
     //! Sets the view's bounds.
     virtual void setBounds(const Rect2& rect) = 0;
+    
+    //! @brief
+    //! Updates the view and its children.
+    //!
+    virtual void update(); 
 };
 
 ARA_END_NAMESPACE

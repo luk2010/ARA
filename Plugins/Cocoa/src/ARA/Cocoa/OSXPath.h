@@ -68,6 +68,11 @@ public:
     //! Closes the Path by returning to the last moveTo point.
     //!
     virtual ARA::Path& close();
+    
+    //! @brief
+    //! Returns the path handle.
+    //!
+    CGMutablePathRef handle() const;
 };
 
 #endif

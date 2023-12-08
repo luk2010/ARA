@@ -21,7 +21,7 @@ ARA::Path(app), mHandle(handle)
 
 OSXPath::~OSXPath()
 {
-    CFRelease(handle);
+    CFRelease(mHandle);
 }
 
 ARA::Point2 OSXPath::cursor() const
@@ -58,4 +58,9 @@ ARA::Path& OSXPath::close()
 {
     CGPathCloseSubpath(mHandle);
     return *this;
+}
+
+CGMutablePathRef OSXPath::handle() const
+{
+    return mHandle;
 }

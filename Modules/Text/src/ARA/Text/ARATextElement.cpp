@@ -47,7 +47,7 @@ void Element::onViewDraw(View& view, Drawer& drawer) const
     mFrame.draw(drawer, Point2());
 }
 
-void Element::onMouseDown(View& view, MouseButton button, const Point2& location) 
+void Element::onViewMouseDown(View& view, MouseButton button, const Point2& location)
 {
     // As the location is already relative to the view bounds, we can directly 
     // call Frame::hitTest() with the given mouse location. 
