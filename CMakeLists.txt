@@ -12,5 +12,6 @@ project(ARA-SDK
     HOMEPAGE_URL "https://github.com/luk2010/ARA") 
 
 add_subdirectory(Core)
+add_subdirectory(Modules)
 add_subdirectory(Plugins)
 add_subdirectory(Examples)

@@ -13,6 +13,7 @@
 #include "ARAWindow.h"
 #include "ARAView.h"
 #include "ARAPath.h"
+#include "ARAFont.h"
 
 ARA_BEGIN_NAMESPACE
 
@@ -100,6 +101,20 @@ public:
     //! @brief
     //! Creates a native Path from an origin point.
     virtual Ptr<Path> createPath(const Point2& origin = { 0, 0 }) const = 0;
+    
+    //! @brief
+    //! Creates a new font.
+    //!
+    //! @param familyName
+    //!     The font family name to look for.
+    //! @param size
+    //!     The font size to load.
+    //! @param traits
+    //!     The font traits to apply to the font.
+    //!
+    //! @return
+    //! A font instance if the font is found, nullptr otherwise.
+    virtual Ptr<Font> createFont(std::string_view familyName, Real size, Font::TraitsMask traits = (Font::TraitsMask)0) const = 0;
 };
 
 ARA_END_NAMESPACE

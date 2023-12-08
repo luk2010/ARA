@@ -1,0 +1,24 @@
+
+file(GLOB ARA_TEXT_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/ARA/Text/*.cpp)
+file(GLOB ARA_TEXT_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/ARA/Text/*.h)
+
+add_library(ARAText SHARED 
+    ${ARA_TEXT_HEADERS}
+    ${ARA_TEXT_SOURCES})
+
+set_property(
+    TARGET ARAText 
+    PROPERTY PUBLIC_HEADER ${ARA_TEXT_HEADERS})
+
+target_include_directories(
+    ARAText 
+    PUBLIC ${ARA_HEADERS_PREFIX})
+
+target_link_libraries(
+    ARAText 
+    PUBLIC ARACore)
+
+install(
+    TARGETS ARAText 
+    LIBRARY DESTINATION ${ARA_INSTALL_PREFIX}
+    PUBLIC_HEADER DESTINATION ${ARA_INSTALL_PREFIX}/ARA/Text)

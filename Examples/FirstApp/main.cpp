@@ -1,6 +1,6 @@
 //
 //  main.cpp
-//  lui
+//  ARA
 //
 //  Created by jacques tronconi on 21/11/2023.
 //
@@ -10,11 +10,18 @@
 #include "ARA/Core/ARAWindow.h"
 #include "ARA/Core/ARAPlugin.h"
 
+ARA_BEGIN_NAMESPACE
+
+
+
+ARA_END_NAMESPACE
+
 class MyAppObserver : public ARA::Application::Observer,
                       public ARA::Window::Observer,
                       public ARA::Element
 {
     ARA::Ptr<ARA::Window> mWindow;
+    ARA::Ptr<ARA::Font> mFont;
     
 public:
     
@@ -27,6 +34,8 @@ public:
         
         mWindow->show();
         mWindow->center();
+        
+        mFont = app.createFont("Courier New", 24, ARA::Font::Italic);
     }
     
     void onWindowClose(ARA::Window& window)

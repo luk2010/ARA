@@ -50,6 +50,11 @@ public:
     //! @brief
     //! Draws a stroked path.
     virtual void strokePath(const Ptr<Path>& path) = 0;
+
+    //! @brief 
+    //! Moves the cursor to the given point.
+    //! 
+    virtual void moveTo(const Point2& point) = 0;
 };
 
 ARA_END_NAMESPACE

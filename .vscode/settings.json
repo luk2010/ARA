@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.wc": "html",
+        "*.h": "cpp",
+        "vector": "cpp"
+    }
+}

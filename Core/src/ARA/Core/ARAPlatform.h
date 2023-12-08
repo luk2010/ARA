@@ -20,6 +20,8 @@
 #include <optional>
 #include <variant>
 #include <array>
+#include <string_view>
+#include <atomic>
 
 #if defined(__APPLE__)
 
@@ -53,6 +55,9 @@
 #define ARA_PLUGIN_LOAD_PFN_NAME "PluginLoad"
 
 ARA_BEGIN_NAMESPACE
+
+typedef int32_t Char32;
+typedef size_t GlyphIndex;
 
 using Real = ARA_PLATFORM_REAL_T;
 

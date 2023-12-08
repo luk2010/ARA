@@ -54,6 +54,11 @@ inline void ThrowIf(bool cnd, Params&&... params)
 //! Declares a new ARA Error name.
 #define ARA_DECLARE_ERROR(Name) struct Name : public ARA::Error { using ARA::Error::Error; };
 
+//! @brief
+//! An error for an invalid index.
+//!
+ARA_DECLARE_ERROR(IndexError) 
+
 ARA_END_NAMESPACE
 
 #endif /* ARAError_h */
