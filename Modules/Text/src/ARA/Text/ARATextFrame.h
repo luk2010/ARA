@@ -160,6 +160,16 @@ public:
     //! Sets the space between two paragraphs.
     //!
     void setParagraphGap(Real space);
+
+    //! @brief 
+    //! Returns true if at least one paragraph needs layout. 
+    //! 
+    bool needsLayout() const; 
+
+    //! @brief 
+    //! Performs a hit test at the given location. 
+    //! 
+    size_t hitTest(const Point2& location) const;
 };
 
 ARA_TEXT_END_NS

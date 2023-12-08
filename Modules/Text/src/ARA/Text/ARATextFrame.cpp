@@ -250,10 +250,19 @@ void Frame::draw(Drawer& drawer, const Point2& origin) const
 
 void Frame::drawParagraph(Drawer& drawer, const Point2& origin, const Paragraph& paragraph) const 
 {
+    if (origin.y >= mRect.maxY())
+        return;
+
     for (auto& line : paragraph.lines) 
     {
+        if (line.origin().y >= mRect.maxY())
+            break;
+
         for (auto& run : line.runs())
         {
+            if (run.origin().x + run.advance().width >= mRect.maxX())
+                break;
+
             drawer.setFillColor(run.attributes().color.value_or(Black));
 
             for (auto& info : run.glyphInfos()) 
@@ -393,7 +402,14 @@ void Frame::layoutParagraph(Paragraph& paragraph)
     
     paragraph.lines = std::move(lines);
     paragraph.needsLayout = false;
-    
+    paragraph.size.width = mRect.size.width - paragraph.origin.x - paragraph.indentation;
+    paragraph.size.height = 0.0;
+
+    if (!paragraph.lines.empty()) 
+    {
+        auto const& lastLine = (*paragraph.lines.rbegin());
+        paragraph.size.height = mRect.size.height - (lastLine.origin().y + lastLine.height());
+    }
 }
 
 void Frame::layoutLine(Line& line, Alignment alignment)
@@ -476,6 +492,56 @@ void Frame::setParagraphGap(Real space)
     
     for (Paragraph& paragraph : mParagraphs)
         paragraph.needsLayout = true;
+}
+
+bool Frame::needsLayout() const 
+{
+    for (const Paragraph& paragraph : mParagraphs) 
+    {
+        if (paragraph.needsLayout) 
+            return true; 
+    }
+
+    return false;
+}
+
+size_t Frame::hitTest(const Point2& location) const 
+{
+    for (auto& paragraph : mParagraphs) 
+    {
+        Rect2 parRect = { paragraph.origin, paragraph.size };
+
+        if (!parRect.contains(location)) 
+            continue;
+
+        for (auto& line : paragraph.lines) 
+        {
+            Rect2 lineRect = { line.origin(), { line.width(), line.height() }};
+
+            if (!lineRect.contains(location)) 
+                continue; 
+            
+            for (auto& run : line.runs())
+            {
+                const Rect2 runRect = { run.origin(), run.advance() };
+
+                if (!runRect.contains(location)) 
+                    continue; 
+                
+                Point2 cursor = run.origin();
+
+                for (size_t i = 0; i < run.glyphInfos().size(); ++i) 
+                {
+                    Rect2 glyphRect = { cursor, run.glyphInfos()[i].size };
+
+                    if (glyphRect.contains(location))
+                        return run.range().start + i;
+                }
+            }
+        }
+    }
+
+    return InvalidIndex;
 }
 
 ARA_TEXT_END_NS

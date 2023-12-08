@@ -28,6 +28,11 @@ struct GlyphInfo
     //! @brief
     //! The advance of the glyph.
     Size2 advance;
+
+    //! @brief 
+    //! The glyph size. 
+    //! 
+    Size2 size;
 };
 
 typedef std::vector<GlyphInfo> GlyphInfoList;

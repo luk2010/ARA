@@ -39,6 +39,17 @@ struct Rect2
     //! @brief
     //! Returns the maximum Y of the rectangle.
     inline Real maxY() const { return std::max(origin.y, origin.y + size.height); }
+
+    //! @brief 
+    //! Returns true if a point is in the rectangle.
+    //! 
+    inline bool contains(const Point2& p) const 
+    {
+        return origin.x <= p.x 
+            && origin.y <= p.y 
+            && origin.x + size.width >= p.x 
+            && origin.y + size.height >= p.y;
+    }
     
     //! @brief
     //! Returns true if this rectangle is the same as the provided one.

@@ -11,6 +11,7 @@
 #include "ARANode.h"
 #include "ARADrawer.h"
 #include "ARARect2.h"
+#include "ARAMouseButton.h"
 
 ARA_BEGIN_NAMESPACE
 
@@ -55,6 +56,16 @@ public:
         //! @brief
         //! The view should draw itself.
         virtual void onViewDraw(View& view, Drawer& drawer) const {}
+
+        //! @brief 
+        //! The mouse has been pressed over the view. 
+        //! 
+        virtual void onViewMouseDown(View& view, MouseButton button, const Point2& location) {}
+
+        //! @brief 
+        //! The mouse has been released over the view. 
+        //! 
+        virtual void onViewMouseUp(View& view, MouseButton button, const Point2& location) {}
     };
     
 protected:

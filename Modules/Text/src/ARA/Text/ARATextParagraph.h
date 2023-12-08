@@ -47,6 +47,11 @@ struct Paragraph
     //! The paragraph origin.
     //!
     Point2 origin;
+
+    //! @brief 
+    //! The paragraph size. 
+    //! 
+    Size2 size;
     
     //! @brief
     //! The indentation margin for the paragraph.

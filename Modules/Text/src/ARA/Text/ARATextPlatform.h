@@ -20,6 +20,8 @@
 #include "ARA/Core/ARAFont.h"
 #include "ARA/Core/ARADrawer.h"
 #include "ARA/Core/ARALineBreakMode.h"
+#include "ARA/Core/ARAElement.h"
+#include "ARA/Core/ARARect2Edges.h"
 
 //! @brief
 //! A macro used to begin the ARA Text namespace.
