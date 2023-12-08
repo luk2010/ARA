@@ -159,9 +159,9 @@ String::String(const void* data, size_t length, StringEncoding encoding)
                 mData[i] = static_cast<Char32>(((const char*)data)[i]);
         }
         else if (encoding == StringEncoding::Utf8)
-            mData = utf8_to_utf32(std::string_view(data, length));
+            mData = utf8_to_utf32(std::string_view((const char*)data, length));
         else if (encoding == StringEncoding::Utf16)
-            mData = utf16_to_utf32(std::u16string_view((const char16_t*)data), length);
+            mData = utf16_to_utf32(std::u16string_view((const char16_t*)data, length));
         else if (encoding == StringEncoding::Utf32)
             mData.insert(mData.begin(), (const Char32*)data, ((const Char32*)data) + length);
     }

@@ -33,4 +33,15 @@ string(rhs.string)
     alignment = rhs.alignment;
 }
 
+Paragraph& Paragraph::operator=(const Paragraph& rhs)
+{
+    range = rhs.range;
+    needsLayout = rhs.needsLayout.load();
+    lines = rhs.lines;
+    indentation = rhs.indentation;
+    lineBreakMode = rhs.lineBreakMode;
+    interline = rhs.interline;
+    alignment = rhs.alignment;
+}
+
 ARA_TEXT_END_NS

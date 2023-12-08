@@ -1,0 +1,22 @@
+file(GLOB ARA_COCOA_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/ARA/Cocoa/*.mm)
+file(GLOB ARA_COCOA_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/ARA/Cocoa/*.h)
+
+find_library(ARA_COCOA_LIB Cocoa REQUIRED)
+find_library(ARA_COREFOUNDATION_LIB CoreFoundation REQUIRED)
+find_library(ARA_CORETEXT_LIB CoreText REQUIRED)
+
+add_library(ARACocoa SHARED 
+    ${ARA_COCOA_HEADERS}
+    ${ARA_COCOA_SOURCES})
+
+target_include_directories(
+    ARACocoa
+    PUBLIC ${ARA_HEADERS_PREFIX})
+
+target_link_libraries(
+    ARACocoa 
+    PUBLIC ARACore ${ARA_COCOA_LIB} ${ARA_COREFOUNDATION_LIB} ${ARA_CORETEXT_LIB})
+
+install(
+    TARGETS ARACocoa
+    LIBRARY DESTINATION ${ARA_INSTALL_PREFIX})

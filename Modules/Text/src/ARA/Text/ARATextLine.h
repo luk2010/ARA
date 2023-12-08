@@ -116,6 +116,11 @@ public:
     const GlyphRunList& runs() const; 
     
     //! @brief
+    //! Copies the given line data.
+    //!
+    Line& operator = (const Line& rhs);
+    
+    //! @brief
     //! Calls a function for each GlyphRun in the line.
     //!
     template < class Cbk > void forEachRun(Cbk&& cbk)

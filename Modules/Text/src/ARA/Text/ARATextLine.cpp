@@ -82,4 +82,13 @@ const GlyphRunList& Line::runs() const
     return mGlyphRuns;
 }
 
+Line& Line::operator=(const Line& rhs)
+{
+    mGlyphRuns = rhs.mGlyphRuns;
+    mSize = rhs.mSize;
+    mOrigin = rhs.mOrigin;
+    mRange = rhs.mRange;
+    return *this;
+}
+
 ARA_TEXT_END_NS

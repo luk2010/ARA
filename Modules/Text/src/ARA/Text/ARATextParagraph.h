@@ -82,6 +82,11 @@ struct Paragraph
     //! Copies another Paragraph. 
     //! 
     Paragraph(const Paragraph& rhs);
+    
+    //! @brief
+    //! Copies paragraph data.
+    //!
+    Paragraph& operator = (const Paragraph& rhs);
 };
 
 ARA_TEXT_END_NS

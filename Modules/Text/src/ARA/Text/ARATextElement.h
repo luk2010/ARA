@@ -75,7 +75,7 @@ public:
     //! Called when a mouse button has been pressed and has hit a valid character index in 
     //! the text frame.
     //! 
-    virtual void onClick(View& view, MouseButton button, const Point2& location, size_t index, Char32 character);
+    virtual void onClick(View& view, MouseButton button, const Point2& location, size_t index, Char32 character) {}
 };
 
 ARA_TEXT_END_NS
