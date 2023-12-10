@@ -168,8 +168,16 @@ public:
 
     //! @brief 
     //! Performs a hit test at the given location. 
-    //! 
-    size_t hitTest(const Point2& location) const;
+    //!
+    //! @param location
+    //!     The location to test the hit.
+    //! @param returnCaretIndex
+    //!     True if the returned index should be a valid caret index.
+    //! @param caretLRRatio
+    //!     The ratio to apply to know if the caret should be returned on the left or on the
+    //!     right of the hitten character.
+    //!
+    size_t hitTest(const Point2& location, bool returnCaretIndex = false, Real caretLRRatio = 0.5) const;
 };
 
 ARA_TEXT_END_NS

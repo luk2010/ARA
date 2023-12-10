@@ -52,10 +52,10 @@ void Element::onViewMouseDown(View& view, MouseButton button, const Point2& loca
     // As the location is already relative to the view bounds, we can directly 
     // call Frame::hitTest() with the given mouse location. 
 
-    size_t index = mFrame.hitTest(location);
+    size_t index = mFrame.hitTest(location, true, 0.5);
 
     if (index != InvalidIndex) 
-        onClick(view, button, location, index, mFrame.string().at(index));
+        onClick(view, button, location, index, index < mFrame.string().length() ? mFrame.string().at(index) : InvalidIndex);
 }
 
 void Element::setPadding(const Rect2Edges& padding) 

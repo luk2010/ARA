@@ -52,12 +52,18 @@ void GlyphRun::build()
     mGlyphInfos.clear();
     mGlyphInfos.reserve(mCharacters.length);
     mAdvance = { 0, 0 };
+    mSize.width = 0.0;
+    mSize.height = font->size();
     
     for (size_t i = mCharacters.start; i < mCharacters.end(); ++i)
     {
         GlyphInfo infos = font->glyphInfo(font->glyphIndex(mString.at(i)));
+        
         mAdvance.width += infos.advance.width;
         mAdvance.height += infos.advance.height;
+        
+        mSize.width += std::max(infos.advance.width, infos.size.width);
+        
         mGlyphInfos.push_back(infos);
     }
 }
@@ -178,6 +184,16 @@ const GlyphInfoList& GlyphRun::glyphInfos() const
 const CharAttributes& GlyphRun::attributes() const 
 {
     return mAttributes;
+}
+
+Size2 GlyphRun::size() const
+{
+    return mSize;
+}
+
+Rect2 GlyphRun::rect() const
+{
+    return { mOrigin, mSize };
 }
 
 GlyphRun& GlyphRun::operator = (const GlyphRun& run) 

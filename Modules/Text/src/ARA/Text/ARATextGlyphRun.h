@@ -60,6 +60,11 @@ class GlyphRun
     //!
     Point2 mOrigin;
     
+    //! @brief
+    //! The run size.
+    //!
+    Size2 mSize;
+    
 public:
     
     //! @brief
@@ -156,6 +161,16 @@ public:
     //! Returns the attributes for this run. 
     //! 
     const CharAttributes& attributes() const; 
+    
+    //! @brief
+    //! Returns the run size.
+    //!
+    Size2 size() const;
+    
+    //! @brief
+    //! Returns the run rectangle.
+    //!
+    Rect2 rect() const; 
 
     //! @brief 
     //! Copies the data in a given GlyphRun. 

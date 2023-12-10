@@ -271,8 +271,8 @@ void Frame::drawParagraph(Drawer& drawer, const Point2& origin, const Paragraph&
             
             Point2 pt =
             {
-                .x = origin.x + run.origin().x,
-                .y = origin.y + line.origin().y + line.height()
+                .x = run.origin().x,
+                .y = origin.y + line.height()
             };
 
             for (auto& info : run.glyphInfos()) 
@@ -280,6 +280,7 @@ void Frame::drawParagraph(Drawer& drawer, const Point2& origin, const Paragraph&
                 drawer.push();
                 
                 drawer.translate(pt);
+                
                 if (info.path)
                     drawer.fillPath(info.path);
                 
@@ -345,6 +346,8 @@ void Frame::layoutParagraph(Paragraph& paragraph)
     
     Point2 cursor = { paragraph.origin.x + paragraph.indentation, paragraph.origin.y };
     Line line(mString, mRect.size.width - cursor.x);
+    
+    line.setOrigin(cursor);
     
     for (GlyphRun& run : runs)
     {
@@ -464,7 +467,7 @@ void Frame::layoutLine(Line& line, Alignment alignment)
             
             line.forEachRun([&](GlyphRun& run){
                 Point2 newOrigin = run.origin();
-                newOrigin.x = offset;
+                newOrigin.x += offset;
                 run.setOrigin(newOrigin);
                 
                 offset = run.end().x + ((line.width() - line.lastRun().end().x) / (line.runs().size() - 1));
@@ -524,7 +527,7 @@ bool Frame::needsLayout() const
     return false;
 }
 
-size_t Frame::hitTest(const Point2& location) const 
+size_t Frame::hitTest(const Point2& location, bool returnCaretIndex, Real caretLRRatio) const
 {
     for (auto& paragraph : mParagraphs) 
     {
@@ -542,7 +545,7 @@ size_t Frame::hitTest(const Point2& location) const
             
             for (auto& run : line.runs())
             {
-                const Rect2 runRect = { run.origin(), run.advance() };
+                const Rect2 runRect = run.rect();
 
                 if (!runRect.contains(location)) 
                     continue; 
@@ -551,10 +554,22 @@ size_t Frame::hitTest(const Point2& location) const
 
                 for (size_t i = 0; i < run.glyphInfos().size(); ++i) 
                 {
-                    Rect2 glyphRect = { cursor, run.glyphInfos()[i].size };
+                    Rect2 glyphRect = { cursor, { run.glyphInfos()[i].advance.width, run.size().height } };
 
                     if (glyphRect.contains(location))
+                    {
+                        if (returnCaretIndex)
+                        {
+                            const Real ratio = (location.x - glyphRect.origin.x) / glyphRect.size.width;
+                            
+                            if (ratio >= caretLRRatio)
+                                return run.range().start + i + 1;
+                        }
+                        
                         return run.range().start + i;
+                    }
+                    
+                    cursor.x += glyphRect.size.width;
                 }
             }
         }

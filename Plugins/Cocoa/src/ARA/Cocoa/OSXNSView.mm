@@ -60,10 +60,19 @@
     {
         NSPoint location = event.locationInWindow;
         location = [self->view->handle() convertPoint:location fromView:nil];
+
+        // We should be careful that Y coordinates are inverted on OSX.
         
-        observer->onViewMouseDown(*self->view,
-                                  ARA::MouseButton::Left,
-                                  { location.x, location.y });
+        CGFloat height = self->view->frame().size.height;
+        location.y = height - location.y;
+        
+        // And that we also have High DPI on Retina displays.
+        
+        // location = [self->view->handle().window convertPointFromBacking:location];
+
+        // Now we can send our event.
+        
+        observer->onViewMouseDown(*self->view, ARA::MouseButton::Left, { location.x, location.y });
     }
 }
 
