@@ -47,17 +47,6 @@ void Element::onViewDraw(View& view, Drawer& drawer) const
     mFrame.draw(drawer, Point2());
 }
 
-void Element::onViewMouseDown(View& view, MouseButton button, const Point2& location)
-{
-    // As the location is already relative to the view bounds, we can directly 
-    // call Frame::hitTest() with the given mouse location. 
-
-    size_t index = mFrame.hitTest(location, true, 0.5);
-
-    if (index != InvalidIndex) 
-        onClick(view, button, location, index, index < mFrame.string().length() ? mFrame.string().at(index) : InvalidIndex);
-}
-
 void Element::setPadding(const Rect2Edges& padding) 
 {
     mPadding = padding; 
@@ -66,6 +55,37 @@ void Element::setPadding(const Rect2Edges& padding)
 Rect2Edges Element::padding() const 
 {
     return mPadding;
+}
+
+void Element::setString(const String& string)
+{
+    mFrame.setString(string);
+}
+
+const String& Element::string() const
+{
+    return mFrame.string();
+}
+
+bool Element::onMouseDown(const MouseDownEvent& event)
+{
+    View& selfView = const_cast < View& >(dynamic_cast < const View& >(event.emitter));
+    
+    // As the location is already relative to the view bounds, we can directly
+    // call Frame::hitTest() with the given mouse location.
+    
+    size_t index = mFrame.hitTest(event.location, true, 0.5);
+    
+    if (index != InvalidIndex)
+        return onClick(selfView,
+                       event.button,
+                       event.location,
+                       index,
+                       index < mFrame.string().length() ?
+                            mFrame.string().at(index) :
+                            InvalidIndex);
+    
+    return false;
 }
 
 ARA_TEXT_END_NS

@@ -1,1 +1,2 @@
 add_subdirectory(Text)
+add_subdirectory(Controls)

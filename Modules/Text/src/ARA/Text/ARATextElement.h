@@ -57,11 +57,6 @@ public:
     virtual void onViewDraw(View& view, Drawer& drawer) const;
 
     //! @brief 
-    //! Makes a hit test on the text frame and calls the function `onClick`. 
-    //! 
-    virtual void onViewMouseDown(View& view, MouseButton button, const Point2& location);
-
-    //! @brief 
     //! Sets the text padding. 
     //! 
     virtual void setPadding(const Rect2Edges& padding);
@@ -75,7 +70,24 @@ public:
     //! Called when a mouse button has been pressed and has hit a valid character index in 
     //! the text frame.
     //! 
-    virtual void onClick(View& view, MouseButton button, const Point2& location, size_t index, Char32 character) {}
+    virtual bool onClick(View& view, MouseButton button, const Point2& location, size_t index, Char32 character) { return false; }
+    
+    //! @brief
+    //! Sets the string of the element.
+    //!
+    virtual void setString(const String& string);
+    
+    //! @brief
+    //! Returns the string in the text element.
+    //!
+    virtual const String& string() const; 
+    
+protected:
+    
+    //! @brief
+    //! Makes a hit test on the text frame and calls the function `onClick`.
+    //!
+    virtual bool onMouseDown(const MouseDownEvent& event);
 };
 
 ARA_TEXT_END_NS

@@ -16,13 +16,14 @@ ARA_BEGIN_NAMESPACE
 //! @brief
 //! A Window common class.
 class Window : public ApplicationObject,
-               public std::enable_shared_from_this<Window>
+               public std::enable_shared_from_this<Window>,
+               public EventEmitter
 {
 public:
     
     //! @brief
     //! The Window Observer.
-    struct Observer
+    struct Observer : public EventListener
     {
         //! @brief
         //! Destructor.
@@ -109,7 +110,7 @@ public:
     
     //! @brief
     //! Sets the current window observer.
-    inline void setObserver(const Ptr<Observer>& observer) { mObserver = observer; }
+    virtual void setObserver(const Ptr<Observer>& observer);
     
     //! @brief
     //! Returns the window's content view.

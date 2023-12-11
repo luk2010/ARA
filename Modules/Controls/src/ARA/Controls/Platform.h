@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //! @file
-//!     ARA/Core/ARAMouseButton.h
+//!     ARA/Controls/Platform.h
 //! @date
-//!     2023/12/08
+//!     2023/12/10
 //! @author
 //!     Luk2010, Atlanti's Corp
 //! @copyright
@@ -11,24 +11,12 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ARA_CORE_MOUSEBUTTON_H__
-#define __ARA_CORE_MOUSEBUTTON_H__
+#ifndef __ARA_CONTROLS_PLATFORM_H__
+#define __ARA_CONTROLS_PLATFORM_H__
 
-#include "ARAPlatform.h"
+#include "ARA/Text/ARATextElement.h"
 
-ARA_BEGIN_NAMESPACE
-
-//! @brief 
-//! The different mouse buttons. 
-//! 
-enum class MouseButton 
-{
-    None = 0,
-    Left,
-    Right, 
-    Wheel
-};
-
-ARA_END_NAMESPACE
+#define ARA_CONTROLS_BEGIN_NS namespace ARA { namespace Controls {
+#define ARA_CONTROLS_END_NS }}
 
 #endif

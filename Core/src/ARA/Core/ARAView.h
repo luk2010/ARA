@@ -12,6 +12,7 @@
 #include "ARADrawer.h"
 #include "ARARect2.h"
 #include "ARAMouseButton.h"
+#include "ARA/Core/ARAEventEmitter.h"
 
 ARA_BEGIN_NAMESPACE
 
@@ -21,13 +22,14 @@ class Window;
 //! A base class to create native views.
 class View : public std::enable_shared_from_this<View>,
              public Node<View>,
-             public ApplicationObject
+             public ApplicationObject,
+             public EventEmitter
 {
 public:
     
     //! @brief
     //! The View Observer.
-    struct Observer
+    struct Observer : public EventListener
     {
         //! @brief
         //! Destructor.
@@ -56,16 +58,6 @@ public:
         //! @brief
         //! The view should draw itself.
         virtual void onViewDraw(View& view, Drawer& drawer) const {}
-
-        //! @brief 
-        //! The mouse has been pressed over the view. 
-        //! 
-        virtual void onViewMouseDown(View& view, MouseButton button, const Point2& location) {}
-
-        //! @brief 
-        //! The mouse has been released over the view. 
-        //! 
-        virtual void onViewMouseUp(View& view, MouseButton button, const Point2& location) {}
     };
     
 protected:
@@ -120,7 +112,7 @@ public:
     
     //! @brief
     //! Sets the view current observer.
-    inline void setObserver(const Ptr<Observer>& observer) { mObserver = observer; }
+    virtual void setObserver(const Ptr<Observer>& observer);
     
     //! @brief
     //! Returns the current view frame.

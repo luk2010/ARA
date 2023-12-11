@@ -54,26 +54,42 @@
 
 - (void)mouseDown:(NSEvent *)event
 {
-    auto observer = self->view->observer();
+    NSPoint location = [self translateEventLocation:event.locationInWindow];
+
+    // Now we can send our event.
     
-    if (observer)
-    {
-        NSPoint location = event.locationInWindow;
-        location = [self->view->handle() convertPoint:location fromView:nil];
+    ARA::MouseDownEvent e(*self->view,
+                          ARA::MouseButton::Left,
+                          { location.x, location.y },
+                          { NSEvent.mouseLocation.x, NSEvent.mouseLocation.y });
+    
+    self->view->sendEvent(e);
+}
 
-        // We should be careful that Y coordinates are inverted on OSX.
-        
-        CGFloat height = self->view->frame().size.height;
-        location.y = height - location.y;
-        
-        // And that we also have High DPI on Retina displays.
-        
-        // location = [self->view->handle().window convertPointFromBacking:location];
+- (void)mouseUp:(NSEvent *)event
+{
+    NSPoint location = [self translateEventLocation:event.locationInWindow];
+    
+    // Now we can send our event.
+    
+    ARA::MouseUpEvent e(*self->view,
+                        ARA::MouseButton::Left,
+                        { location.x, location.y },
+                        { NSEvent.mouseLocation.x, NSEvent.mouseLocation.y });
+    
+    self->view->sendEvent(e);
+}
 
-        // Now we can send our event.
-        
-        observer->onViewMouseDown(*self->view, ARA::MouseButton::Left, { location.x, location.y });
-    }
+- (NSPoint)translateEventLocation:(NSPoint)location
+{
+    location = [self->view->handle() convertPoint:location fromView:nil];
+    
+    // We should be careful that Y coordinates are inverted on OSX.
+    
+    CGFloat height = self->view->frame().size.height;
+    location.y = height - location.y;
+    
+    return location;
 }
 
 @end

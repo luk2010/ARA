@@ -12,6 +12,10 @@ set_property(
     TARGET ARACore 
     PROPERTY PUBLIC_HEADER ${ARA_CORE_HEADERS})
 
+target_include_directories(
+    ARACore 
+    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+
 install(
     TARGETS ARACore 
     LIBRARY DESTINATION ${ARA_INSTALL_PREFIX}

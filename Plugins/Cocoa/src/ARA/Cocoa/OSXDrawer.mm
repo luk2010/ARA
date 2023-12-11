@@ -17,9 +17,7 @@
 OSXDrawer::OSXDrawer(ARA::Application& app, NSGraphicsContext* handle):
 ARA::Drawer(app), mHandle(handle)
 {
-    CGAffineTransform transform = CGContextGetUserSpaceToDeviceSpaceTransform(mHandle.CGContext);
-    
-    std::cout << "X scaling: " << transform.a << " ; Y scaling: " << transform.d << std::endl;
+
 }
 
 void OSXDrawer::push()

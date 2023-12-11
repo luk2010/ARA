@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //! @file
-//!     ARA/Cocoa/ARAView.cpp
+//!     ARA/Cocoa/ARAWindow.cpp
 //! @date
-//!     2023/12/08
+//!     2023/12/11
 //! @author
 //!     Luk2010, Atlanti's Corp
 //! @copyright
@@ -11,11 +11,11 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "ARAView.h"
+#include "ARA/Core/ARAWindow.h"
 
 ARA_BEGIN_NAMESPACE
 
-void View::setObserver(const Ptr < Observer >& observer)
+void Window::setObserver(const Ptr < Observer >& observer)
 {
     auto old = mObserver.lock();
     
@@ -29,17 +29,6 @@ void View::setObserver(const Ptr < Observer >& observer)
         if (observer)
             addListener(observer);
     }
-}
-
-void View::update()
-{
-    auto controller = observer();
-    
-    if (controller)
-        controller->onViewUpdate(*this);
-    
-    for (auto& child : mChildrenNodes)
-        child->update();
 }
 
 ARA_END_NAMESPACE
