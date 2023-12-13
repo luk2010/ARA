@@ -80,6 +80,11 @@ protected:
     //!
     inline void setParentView(View& ref, const Ptr<View>& view) { ref.setParentView(view); }
     
+    //! @brief
+    //! A boolean true if the view accepts mouse moved events.
+    //!
+    AtomBool mAcceptsMouseMoveEvents;
+    
 public:
     
     //! @brief
@@ -142,6 +147,16 @@ public:
     //! Updates the view and its children.
     //!
     virtual void update(); 
+    
+    //! @brief
+    //! Returns true if the view accepts mouse moved events.
+    //!
+    virtual bool acceptsMouseMoveEvents() const;
+    
+    //! @brief
+    //! Sets if the view accepts mouse moved events.
+    //!
+    virtual void setAcceptsMouseMoveEvents(bool value);
 };
 
 ARA_END_NAMESPACE

@@ -19,6 +19,8 @@
 @interface OSXNSView : NSView
 {
     OSXView* view;
+    NSTrackingRectTag trackingRect;
+    bool wasAcceptingMouseEvent;
 }
 
 - (instancetype) initWithView:(OSXView*)view;

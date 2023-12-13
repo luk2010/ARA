@@ -63,6 +63,9 @@ bool Control::onMouseDown(const MouseDownEvent& event)
 {
     mState.MouseDown = true;
     mState.button = event.button;
+    
+    onStateChange(mState);
+    
     return false;
 }
 
@@ -72,6 +75,8 @@ bool Control::onMouseUp(const MouseUpEvent& event)
     {
         mState.MouseDown = false;
         mState.button = MouseButton::None;
+        
+        onStateChange(mState);
         
         if (event.button == MouseButton::Left && mActionMask.Click)
             return action();
@@ -91,6 +96,8 @@ bool Control::onKeyDown(const KeyEvent& event)
     mState.KeyDown = true;
     mState.key = event.character;
     
+    onStateChange(mState);
+    
     return false;
 }
 
@@ -98,6 +105,9 @@ bool Control::onKeyUp(const KeyEvent& event)
 {
     mState.KeyDown = false;
     mState.key = 0;
+    
+    onStateChange(mState);
+    
     return false;
 }
 

@@ -42,4 +42,14 @@ void View::update()
         child->update();
 }
 
+bool View::acceptsMouseMoveEvents() const
+{
+    return mAcceptsMouseMoveEvents.load();
+}
+
+void View::setAcceptsMouseMoveEvents(bool value)
+{
+    mAcceptsMouseMoveEvents.store(value);
+}
+
 ARA_END_NAMESPACE

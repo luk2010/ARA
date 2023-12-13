@@ -254,6 +254,29 @@ Color Element::borderColor(RectEdge edge) const
     return border.color.value();
 }
 
+void Element::setBorderColor(RectEdge edge, const Inheritable < Color >& color)
+{
+    auto& border = mBorders[static_cast < size_t >(edge)];
+    
+    if (!border.color.isEqualTo(color))
+    {
+        border.color = color;
+        view()->setNeedsDraw(true);
+    }
+}
+
+void Element::setBorderColor(const Inheritable < Color >& color)
+{
+    for (auto& border : mBorders)
+    {
+        if (!border.color.isEqualTo(color))
+        {
+            border.color = color;
+            view()->setNeedsDraw(true);
+        }
+    }
+}
+
 void Element::drawBackground(const View& view, Drawer& drawer,
                              const Ptr<Path>& rect,
                              const Color& color) const

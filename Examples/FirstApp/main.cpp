@@ -46,9 +46,10 @@ public:
         window.application().terminate();
     }
     
-    void onClick(ARA::View& view, ARA::MouseButton button, const ARA::Point2& location, size_t index, ARA::Char32 character)
+    bool onClick(ARA::View& view, ARA::MouseButton button, const ARA::Point2& location, size_t index, ARA::Char32 character)
     {
         std::cout << "Clicked on index: " << index << std::endl;
+        return false;
     }
     
 protected:

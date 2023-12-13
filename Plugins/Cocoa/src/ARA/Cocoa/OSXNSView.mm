@@ -21,7 +21,10 @@
     self = [super initWithFrame:NSZeroRect];
     
     if (self)
+    {
         self->view = view;
+        self->trackingRect = 0;
+    }
     
     return self;
 }
@@ -90,6 +93,92 @@
     location.y = height - location.y;
     
     return location;
+}
+
+- (void)viewDidMoveToWindow
+{
+    trackingRect = [self addTrackingRect:self.bounds
+                                   owner:self
+                                userData:NULL
+                            assumeInside:NO];
+}
+
+- (void)mouseEntered:(NSEvent *)event
+{
+    wasAcceptingMouseEvent = self.window.acceptsMouseMovedEvents;
+    
+    if (view->acceptsMouseMoveEvents())
+    {
+        [self.window setAcceptsMouseMovedEvents:YES];
+        [self.window makeFirstResponder:self];
+    }
+    
+    NSPoint location = [self translateEventLocation:event.locationInWindow];
+    
+    ARA::MouseEnterEvent ev(*view,
+                            { location.x, location.y },
+                            { event.locationInWindow.x, event.locationInWindow.y });
+    
+    view->sendEvent(ev);
+}
+
+- (void)mouseMoved:(NSEvent *)event
+{
+    if (view->acceptsMouseMoveEvents())
+    {
+        NSPoint location = [self translateEventLocation:event.locationInWindow];
+        
+        ARA::MouseMoveEvent ev(*view,
+                               { location.x, location.y },
+                               { event.locationInWindow.x, event.locationInWindow.y },
+                               { event.deltaX, event.deltaY });
+        
+        view->sendEvent(ev);
+    }
+}
+
+- (void)mouseExited:(NSEvent *)event
+{
+    [self.window setAcceptsMouseMovedEvents:wasAcceptingMouseEvent];
+    
+    NSPoint location = [self translateEventLocation:event.locationInWindow];
+    
+    ARA::MouseExitEvent ev(*view,
+                           { location.x, location.y },
+                           { event.locationInWindow.x, event.locationInWindow.y });
+    
+    view->sendEvent(ev);
+}
+
+- (void)setFrame:(NSRect)frame
+{
+    [super setFrame:frame];
+    [self removeTrackingRect:trackingRect];
+    
+    trackingRect = [self addTrackingRect:self.bounds
+                                   owner:self
+                                userData:NULL
+                            assumeInside:NO];
+}
+
+- (void)setBounds:(NSRect)bounds
+{
+    [super setBounds:bounds];
+    [self removeTrackingRect:trackingRect];
+    
+    trackingRect = [self addTrackingRect:self.bounds
+                                   owner:self
+                                userData:NULL
+                            assumeInside:NO];
+}
+
+- (void)viewWillMoveToWindow:(NSWindow *)newWindow
+{
+    if (self.window && trackingRect)
+    {
+        [self removeTrackingRect:trackingRect];
+        trackingRect = 0;
+    }
 }
 
 @end

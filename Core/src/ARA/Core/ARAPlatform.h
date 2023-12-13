@@ -60,6 +60,7 @@ typedef int32_t Char32;
 typedef size_t GlyphIndex;
 
 using Real = ARA_PLATFORM_REAL_T;
+using AtomBool = std::atomic < bool >;
 
 constexpr auto InvalidIndex = std::string::npos;
 
@@ -80,6 +81,26 @@ constexpr bool AreEqual(char const* a, char const* b)
 {
     return std::string_view(a) == b;
 }
+
+//! @brief
+//! A template class that can have a value, or not. Similar to std::optional.
+//!
+template < class T >
+class Maybe
+{
+    std::optional < T > mValue;
+    
+public:
+    
+    Maybe(): mValue(std::nullopt) {}
+    Maybe(const T& value): mValue(value) {}
+    
+    bool hasValue() const { return mValue.has_value(); }
+    operator bool() const { return hasValue(); }
+    
+    T& value() { return mValue.value(); }
+    const T& value() const { return mValue.value(); }
+};
 
 ARA_END_NAMESPACE
 

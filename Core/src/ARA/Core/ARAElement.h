@@ -101,6 +101,16 @@ public:
     //! Returns the border color of a given edge.
     virtual Color borderColor(RectEdge edge) const;
     
+    //! @brief
+    //! Sets the border color of a given edge.
+    //!
+    virtual void setBorderColor(RectEdge edge, const Inheritable < Color >& color);
+    
+    //! @brief
+    //! Sets the border color of all edges.
+    //!
+    virtual void setBorderColor(const Inheritable < Color >& color);
+    
 protected:
     
     //! @brief
