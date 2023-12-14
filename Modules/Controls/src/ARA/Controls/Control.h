@@ -79,6 +79,18 @@ public:
     //!
     virtual bool handleEvent(const Event& event);
     
+    //! @brief
+    //! Returns the current control state.
+    //!
+    virtual const ControlState& state() const;
+    
+protected:
+
+    //! @brief
+    //! Returns the current control state.
+    //!
+    virtual ControlState& state();
+    
 protected:
     
     //! @brief

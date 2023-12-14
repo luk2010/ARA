@@ -132,6 +132,11 @@ public:
     virtual void apply(Element& element) const;
 };
 
+typedef Ptr < ElementStyle > ElementStylePtr;
+typedef std::vector < ElementStylePtr > ElementStyleList;
+
+ARA_DECLARE_ERROR(ElementStyleError)
+
 ARA_END_NAMESPACE
 
 #endif

@@ -14,6 +14,7 @@
 #ifndef __ARA_CONTROLS_PLATFORM_H__
 #define __ARA_CONTROLS_PLATFORM_H__
 
+#include "ARA/Core/ARAElementStyle.h"
 #include "ARA/Text/ARATextElement.h"
 
 #define ARA_CONTROLS_BEGIN_NS namespace ARA { namespace Controls {

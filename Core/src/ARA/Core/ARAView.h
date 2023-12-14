@@ -89,7 +89,7 @@ public:
     
     //! @brief
     //! Creates a new View.
-    inline View(Application& application): ApplicationObject(application) {}
+    inline View(Application& application): ApplicationObject(application), mAcceptsMouseMoveEvents(false) {}
     
     //! @brief
     //! Returns the window that holds this view, if available.

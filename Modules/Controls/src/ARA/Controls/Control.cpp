@@ -59,6 +59,16 @@ bool Control::handleEvent(const Event& event)
     return true;
 }
 
+const ControlState& Control::state() const
+{
+    return mState;
+}
+
+ControlState& Control::state()
+{
+    return mState;
+}
+
 bool Control::onMouseDown(const MouseDownEvent& event)
 {
     mState.MouseDown = true;
