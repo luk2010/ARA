@@ -82,6 +82,11 @@ public:
     //!
     virtual const String& string() const; 
     
+    //! @brief
+    //! Returns the string in the text element.
+    //!
+    virtual String& string();
+    
 protected:
     
     //! @brief

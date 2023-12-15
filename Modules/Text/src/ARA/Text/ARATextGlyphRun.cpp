@@ -120,7 +120,7 @@ GlyphRun GlyphRun::divide(size_t index)
                                   mGlyphInfos.begin() + index,
                                   mGlyphInfos.end());
         mGlyphInfos.erase(mGlyphInfos.begin() + index, 
-                          mGlyphInfos.begin() + mCharacters.length - index);
+                          mGlyphInfos.end());
         
         mAdvance = { 0, 0 };
         

@@ -69,6 +69,11 @@ public:
     inline const String& string() const { return mString; }
     
     //! @brief
+    //! Returns the attributed string.
+    //!
+    inline String& string() { return mString; }
+    
+    //! @brief
     //! Adds a String to the current String at given index.
     void insert(size_t index, const String& string);
     

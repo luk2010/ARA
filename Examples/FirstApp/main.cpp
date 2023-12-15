@@ -10,6 +10,26 @@
 #include "ARA/Core/ARAWindow.h"
 #include "ARA/Core/ARAPlugin.h"
 #include "ARA/Text/ARATextElement.h"
+#include "ARA/Core/ElementStyleManager.h"
+#include "ARA/Controls/Controls.h"
+
+class MyButtonList : public ARA::Element
+{
+    ARA::Controls::ButtonList mButtons;
+    
+protected:
+    
+    ARA::ViewPtr createView(ARA::Application& app)
+    {
+        auto view = app.createView();
+        
+        auto button = ARA::MakePtr < ARA::Controls::Button >(ARA::Text::String("Button 1"));
+        mButtons.push_back(button);
+        addChild(button);
+        
+        
+    }
+};
 
 class MyAppObserver : public ARA::Application::Observer,
                       public ARA::Window::Observer,
@@ -38,7 +58,19 @@ public:
         mWindow->show();
         mWindow->center();
         
-        mFont = app.createFont("Courier New", 24, ARA::Font::Italic);
+        mFont = app.createFont("Courier", 24, ARA::Font::Italic);
+        
+        ARA::Text::String str("Hello World!", { .font = mFont });
+        setString(str);
+        
+        ARA::ElementStylePtr style = ARA::ElementStyleManager::Shared().newStyle("root");
+        style->setBackgroundColor(ARA::Color{ 1, 1, 1, 0.8 });
+        
+        style = ARA::ElementStyleManager::Shared().newStyle("button", "root");
+        style->setCornerRadius(5.0);
+        style->setBorder(1.0, ARA::Color{ 0, 0, 0, 1 });
+        
+        style->apply(*this);
     }
     
     void onWindowClose(ARA::Window& window)

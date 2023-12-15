@@ -85,7 +85,7 @@ public:
     
     //! @brief
     //! Creates a new String from a UTF8 encoded C string.
-    String(std::string_view utf8str);
+    String(std::string_view utf8str, const CharAttributes& attribs = {});
     
     //! @brief
     //! Creates a new String from a buffer of data with the given encoding.

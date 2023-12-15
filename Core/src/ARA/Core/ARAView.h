@@ -17,6 +17,10 @@
 ARA_BEGIN_NAMESPACE
 
 class Window;
+class View;
+
+typedef Ptr < View > ViewPtr;
+typedef std::vector < ViewPtr > ViewList;
 
 //! @brief
 //! A base class to create native views.
@@ -85,11 +89,17 @@ protected:
     //!
     AtomBool mAcceptsMouseMoveEvents;
     
+    //! @brief
+    //! A boolean true if the view currently needs to layout its children.
+    //!
+    AtomBool mNeedsLayoutChildren;
+    
 public:
     
     //! @brief
     //! Creates a new View.
-    inline View(Application& application): ApplicationObject(application), mAcceptsMouseMoveEvents(false) {}
+    //!
+    View(Application& application);
     
     //! @brief
     //! Returns the window that holds this view, if available.
@@ -125,7 +135,7 @@ public:
     
     //! @brief
     //! Sets the current view frame.
-    virtual void setFrame(const Rect2& frame) = 0;
+    virtual void setFrame(const Rect2& frame);
     
     //! @brief
     //! Sets weither the view needs a redraw.
@@ -141,7 +151,7 @@ public:
     
     //! @brief
     //! Sets the view's bounds.
-    virtual void setBounds(const Rect2& rect) = 0;
+    virtual void setBounds(const Rect2& rect);
     
     //! @brief
     //! Updates the view and its children.
@@ -157,6 +167,16 @@ public:
     //! Sets if the view accepts mouse moved events.
     //!
     virtual void setAcceptsMouseMoveEvents(bool value);
+    
+    //! @brief
+    //! Returns true if the view needs to layout its children.
+    //!
+    virtual bool needsLayoutChildren() const;
+    
+    //! @brief
+    //! Forces the mNeedsLayoutChildren property value.
+    //!
+    virtual void setNeedsLayoutChildren(bool value);
 };
 
 ARA_END_NAMESPACE

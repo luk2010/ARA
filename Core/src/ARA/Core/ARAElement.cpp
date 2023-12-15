@@ -277,6 +277,15 @@ void Element::setBorderColor(const Inheritable < Color >& color)
     }
 }
 
+void Element::onViewUpdate(View& view)
+{
+    if (view.needsLayoutChildren())
+    {
+        layoutChildren(view);
+        view.setNeedsLayoutChildren(false);
+    }
+}
+
 void Element::drawBackground(const View& view, Drawer& drawer,
                              const Ptr<Path>& rect,
                              const Color& color) const
@@ -298,6 +307,11 @@ void Element::drawBorderEdge(const View &view, Drawer &drawer, const Ptr<Path> &
     drawer.strokePath(path);
     
     drawer.pop();
+}
+
+void Element::layoutChildren(View& view) const
+{
+    
 }
 
 ARA_END_NAMESPACE

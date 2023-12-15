@@ -12,6 +12,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "ARA/Core/ARAElementStyle.h"
+#include "ARA/Core/ElementStyleManager.h"
 
 ARA_BEGIN_NAMESPACE
 
@@ -45,6 +46,21 @@ mName(name), mParent(parent)
 const std::string& ElementStyle::name() const
 {
     return mName;
+}
+
+Ptr < ElementStyle > ElementStyle::parent() const
+{
+    return mParent.lock();
+}
+
+void ElementStyle::setParent(const Ptr < ElementStyle >& style)
+{
+    mParent = style;
+}
+
+void ElementStyle::setParent(const std::string& styleName)
+{
+    setParent(ElementStyleManager::Shared().find(styleName));
 }
 
 void ElementStyle::setBackgroundColor(const Inheritable < Color >& color)

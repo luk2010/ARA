@@ -15,9 +15,9 @@
 #include "OSXPath.h"
 
 OSXFont::OSXFont(ARA::Application& app, NSFont* handle):
-ARA::Font(app), mHandle(handle)
+ARA::Font(app), mHandle(nil)
 {
-    
+    mHandle = handle;
 }
 
 OSXFont::~OSXFont()
@@ -29,7 +29,7 @@ std::string OSXFont::familyName() const
 {
     CFStringRef name = CTFontCopyFamilyName((CTFontRef)mHandle);
     
-    std::string str = [(NSString*)name UTF8String];
+    std::string str = [(__bridge NSString*)name UTF8String];
     
     CFRelease(name);
     
@@ -77,7 +77,7 @@ ARA::GlyphInfo OSXFont::glyphInfo(ARA::GlyphIndex index) const
     
     ARA::GlyphInfo infos;
     
-    infos.name = [(NSString*)CTFontCopyNameForGlyph((CTFontRef)mHandle, (CGGlyph)index) UTF8String];
+    infos.name = [(NSString*)CFBridgingRelease(CTFontCopyNameForGlyph((CTFontRef)mHandle, (CGGlyph)index)) UTF8String];
     
     CGRect boundingRect;
     CGSize advance;

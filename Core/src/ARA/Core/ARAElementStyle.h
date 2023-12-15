@@ -67,6 +67,21 @@ public:
     virtual const std::string& name() const;
     
     //! @brief
+    //! Returns the style parent.
+    //!
+    virtual Ptr < ElementStyle > parent() const;
+    
+    //! @brief
+    //! Sets the parent style.
+    //!
+    virtual void setParent(const Ptr < ElementStyle >& style);
+    
+    //! @brief
+    //! Sets the parent style.
+    //!
+    virtual void setParent(const std::string& styleName);
+    
+    //! @brief
     //! Sets the current background color.
     //!
     virtual void setBackgroundColor(const Inheritable < Color >& color);

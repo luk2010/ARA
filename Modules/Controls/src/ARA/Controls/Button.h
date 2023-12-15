@@ -19,6 +19,11 @@
 
 ARA_CONTROLS_BEGIN_NS
 
+class Button;
+
+typedef Ptr < Button > ButtonPtr;
+typedef std::vector < ButtonPtr > ButtonList;
+
 //! @brief
 //! Defines a button control with three different styles: hover, focus and default.
 //! 
@@ -47,6 +52,11 @@ class Button : public Control
 public:
     
     //! @brief
+    //! Creates a new button instance.
+    //!
+    Button(const Text::String& text);
+    
+    //! @brief
     //! Sets the default style.
     //!
     virtual void setStyle(const ElementStylePtr& style);
@@ -55,6 +65,26 @@ public:
     //! Sets the default style.
     //!
     virtual void setStyle(const std::string& styleName);
+    
+    //! @brief
+    //! Sets the hover style.
+    //!
+    virtual void setHoverStyle(const ElementStylePtr& style);
+    
+    //! @brief
+    //! Sets the hover style.
+    //!
+    virtual void setHoverStyle(const std::string& style);
+    
+    //! @brief
+    //! Sets the focus style.
+    //!
+    virtual void setFocusStyle(const ElementStylePtr& style);
+    
+    //! @brief
+    //! Sets the focus style.
+    //!
+    virtual void setFocusStyle(const std::string& style);
     
     //! @brief
     //! The mouse entered the button.

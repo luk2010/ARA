@@ -15,6 +15,12 @@
 
 ARA_BEGIN_NAMESPACE
 
+View::View(Application& application): 
+ApplicationObject(application), mAcceptsMouseMoveEvents(false), mNeedsLayoutChildren(false)
+{
+    
+}
+
 void View::setObserver(const Ptr < Observer >& observer)
 {
     auto old = mObserver.lock();
@@ -29,6 +35,18 @@ void View::setObserver(const Ptr < Observer >& observer)
         if (observer)
             addListener(observer);
     }
+}
+
+void View::setFrame(const Rect2& rect)
+{
+    if (rect != frame())
+        setNeedsLayoutChildren(true);
+}
+
+void View::setBounds(const Rect2& rect)
+{
+    if (rect != bounds())
+        setNeedsLayoutChildren(true);
 }
 
 void View::update()
@@ -50,6 +68,16 @@ bool View::acceptsMouseMoveEvents() const
 void View::setAcceptsMouseMoveEvents(bool value)
 {
     mAcceptsMouseMoveEvents.store(value);
+}
+
+bool View::needsLayoutChildren() const
+{
+    return mNeedsLayoutChildren.load();
+}
+
+void View::setNeedsLayoutChildren(bool value)
+{
+    mNeedsLayoutChildren.store(value);
 }
 
 ARA_END_NAMESPACE

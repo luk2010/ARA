@@ -142,10 +142,10 @@ String::String()
     
 }
 
-String::String(std::string_view utf8str)
+String::String(std::string_view utf8str, const CharAttributes& attribs)
 {
     mData = utf8_to_utf32(utf8str);
-    mAttributes.resize(mData.size(), CharAttributes());
+    mAttributes.resize(mData.size(), attribs);
 }
 
 String::String(const void* data, size_t length, StringEncoding encoding)

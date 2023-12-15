@@ -67,6 +67,11 @@ const String& Element::string() const
     return mFrame.string();
 }
 
+String& Element::string()
+{
+    return mFrame.string();
+}
+
 bool Element::onMouseDown(const MouseDownEvent& event)
 {
     View& selfView = const_cast < View& >(dynamic_cast < const View& >(event.emitter));
