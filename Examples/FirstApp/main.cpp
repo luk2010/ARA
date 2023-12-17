@@ -13,6 +13,18 @@
 #include "ARA/Core/ElementStyleManager.h"
 #include "ARA/Controls/Controls.h"
 
+class MyButtonStyle : public ARA::ElementStyle
+{
+public:
+    
+    MyButtonStyle(): ARA::ElementStyle("button")
+    {
+        setBackgroundColor(ARA::Color{ 0.0, 0.0, 1.0, 0.8 });
+        setBorder(1.0, ARA::Color{ 0.0, 0.0, 0.0, 0.8 });
+        setCornerRadius(5.0);
+    }
+};
+
 class MyButtonList : public ARA::Element
 {
     ARA::Controls::ButtonList mButtons;
@@ -23,16 +35,31 @@ public:
     {
         auto button = ARA::MakePtr < ARA::Controls::Button >(ARA::Text::String("Button 1"));
         
-        button->setFrameSize({ 200, 40 });
+        button->setFrameSize({ 250, 50 });
+        button->setPadding({ 10, 10, 10, 10 });
+        
+        ARA::ElementStyleManager::Shared().add(ARA::MakePtr < MyButtonStyle >());
+        {
+            auto hover = ARA::ElementStyleManager::Shared().newStyle("button.hover", "button");
+            hover->setBackgroundColor(ARA::Color{ 0.0, 0.0, 0.8, 0.5 });
+            
+            auto focus = ARA::ElementStyleManager::Shared().newStyle("button.focus", "button");
+            focus->setBackgroundColor(ARA::Color{ 0.0, 0.5, 0.5, 0.7 });
+            
+            button->setStyle("button");
+            button->setHoverStyle("button.hover");
+            button->setFocusStyle("button.focus");
+        }
         
         mButtons.push_back(button);
+        add(button);
     }
     
 protected:
     
-    virtual void layoutChildren(ARA::View& view) const
+    virtual void layoutChildren() const
     {
-        mButtons[0]->setFrameOrigin({ 100, 10 });
+        mButtons[0]->setFrameOrigin({ 10, 100 });
     }
 };
 
@@ -75,15 +102,6 @@ public:
         
         ARA::Text::String str("Hello World!", { .font = mFont });
         setString(str);
-        
-        ARA::ElementStylePtr style = ARA::ElementStyleManager::Shared().newStyle("root");
-        style->setBackgroundColor(ARA::Color{ 1, 1, 1, 0.8 });
-        
-        style = ARA::ElementStyleManager::Shared().newStyle("button", "root");
-        style->setCornerRadius(5.0);
-        style->setBorder(1.0, ARA::Color{ 0, 0, 0, 1 });
-        
-        style->apply(*this);
     }
     
     void onWindowClose(ARA::Window& window)
@@ -99,9 +117,9 @@ public:
     
 protected:
     
-    virtual void layoutChildren(ARA::View& view) const
+    virtual void layoutChildren() const
     {
-        mButtonList->setFrame(frame());
+        mButtonList->setFrame(bounds());
     }
 };
 

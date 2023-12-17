@@ -296,6 +296,11 @@ void Element::remove(const ElementPtr& element)
     view().removeChild(element->view().shared_from_this());
 }
 
+Rect2 Element::bounds() const
+{
+    return view().bounds();
+}
+
 void Element::draw(Drawer& drawer) const
 {
     auto& app = Application::Get();

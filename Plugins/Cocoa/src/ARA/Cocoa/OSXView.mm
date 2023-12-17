@@ -36,7 +36,12 @@ ARA::Rect2 OSXView::frame() const
 
 void OSXView::setFrame(const ARA::Rect2& frame)
 {
-    [mHandle setFrame:NSMakeRect(frame.origin.x, frame.origin.y, frame.size.width, frame.size.height)];
+    [mHandle setFrame:NSMakeRect(frame.origin.x, 
+                                 frame.origin.y,
+                                 frame.size.width,
+                                 frame.size.height)];
+    
+    setNeedsLayoutChildren(true);
 }
 
 void OSXView::setNeedsDraw(bool value)
@@ -57,7 +62,12 @@ ARA::Rect2 OSXView::bounds() const
 
 void OSXView::setBounds(const ARA::Rect2& frame)
 {
-    [mHandle setBounds:NSMakeRect(frame.origin.x, frame.origin.y, frame.size.width, frame.size.height)];
+    [mHandle setBounds:NSMakeRect(frame.origin.x, 
+                                  frame.origin.y,
+                                  frame.size.width,
+                                  frame.size.height)];
+    
+    setNeedsLayoutChildren(true);
 }
 
 bool OSXView::_addChild(const ARA::ViewPtr& child, const ARA::ViewPtr& beforeView)

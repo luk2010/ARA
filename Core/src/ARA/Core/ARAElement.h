@@ -171,6 +171,11 @@ public:
     //!
     virtual void remove(const ElementPtr& element);
     
+    //! @brief
+    //! Returns the element view bounds.
+    //!
+    virtual Rect2 bounds() const;
+    
 protected:
     
     //! @brief

@@ -35,6 +35,37 @@ class ViewController : public EventListener
     //!
     ViewPtr mView;
     
+    //! @brief
+    //! A class that defines a custom listener that redirects all events to the owning
+    //! view controller.
+    //!
+    //! @discussion
+    //! This class is needed because we create the view inside the view controller. Because of
+    //! that, `shared_from_this()` is not available.
+    //!
+    struct CustomListener : public EventListener
+    {
+        //! @brief
+        //! Ourself.
+        //!
+        ViewController& controller;
+        
+        //! @brief
+        //! Constructs a new instance.
+        //!
+        inline CustomListener(ViewController& controller): controller(controller) {}
+        
+        //! @brief
+        //! Redirects all events to the controller.
+        //!
+        inline bool handleEvent(const Event& event) { return controller.handleEvent(event); }
+    };
+    
+    //! @brief
+    //! The local event listener used to listen to the view events.
+    //!
+    EventListenerPtr mLocalListener;
+    
 public:
     
     //! @brief

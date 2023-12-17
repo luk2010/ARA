@@ -21,7 +21,7 @@ View::View(Application& application, ViewController& controller):
 ApplicationObject(application), 
 mController(controller),
 mAcceptsMouseMoveEvents(false),
-mNeedsLayoutChildren(false)
+mNeedsLayoutChildren(true)
 {
     
 }

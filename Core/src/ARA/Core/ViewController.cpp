@@ -19,6 +19,8 @@ ARA_BEGIN_NAMESPACE
 ViewController::ViewController()
 {
     mView = Application::Get().createView(*this);
+    mLocalListener = MakePtr < CustomListener >(*this);
+    mView->addListener(mLocalListener);
 }
 
 View& ViewController::view()
