@@ -50,10 +50,10 @@
     if (observer)
         observer->onWindowResize(*self->window, { size.width, size.height });
     
-    auto contentView = self->window->contentView();
+    auto content = window->contentElement();
     
-    if (contentView)
-        contentView->setFrame({{}, { ssize.width, ssize.height }});
+    if (content)
+        content->setFrame({{}, { ssize.width, ssize.height }});
 }
 
 - (void)windowWillClose:(NSNotification *)notification
@@ -66,10 +66,12 @@
 
 - (void)windowDidUpdate:(NSNotification *)notification
 {
-    auto contentView = self->window->contentView();
+    auto content = window->contentElement();
     
-    if (contentView)
-        contentView->update();
+    if (!content)
+        return;
+    
+    content->view().update();
 }
 
 @end
@@ -160,24 +162,11 @@ void OSXWindow::close()
     [mHandle performClose:nil];
 }
 
-void OSXWindow::setContentView(const ARA::Ptr<ARA::View>& view)
+void OSXWindow::_setContentView(ARA::View& view)
 {
-    if (mContentView)
-    {
-        auto observer = mContentView->observer();
-        
-        if (observer)
-            observer->onViewWindowChange(*mContentView, nullptr);
-    }
-    
-    mContentView = view;
-    
-    NSView* handle = dynamic_cast < const OSXView* >(view.get())->handle();
+    NSView* handle = dynamic_cast < OSXView& >(view).handle();
+    ARA::ThrowIf < OSXError >(!handle, "[OSXWindow::_setContentView] Given view has no NSView handle.");
     
     mHandle.contentView = handle;
-    
-    auto observer = view->observer();
-    
-    if (observer)
-        observer->onViewWindowChange(*view, shared_from_this());
+    view.setFrame(contentFrame());
 }

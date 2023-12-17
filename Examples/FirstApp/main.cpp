@@ -17,17 +17,22 @@ class MyButtonList : public ARA::Element
 {
     ARA::Controls::ButtonList mButtons;
     
+public:
+    
+    MyButtonList()
+    {
+        auto button = ARA::MakePtr < ARA::Controls::Button >(ARA::Text::String("Button 1"));
+        
+        button->setFrameSize({ 200, 40 });
+        
+        mButtons.push_back(button);
+    }
+    
 protected:
     
-    ARA::ViewPtr createView(ARA::Application& app)
+    virtual void layoutChildren(ARA::View& view) const
     {
-        auto view = app.createView();
-        
-        auto button = ARA::MakePtr < ARA::Controls::Button >(ARA::Text::String("Button 1"));
-        mButtons.push_back(button);
-        addChild(button);
-        
-        
+        mButtons[0]->setFrameOrigin({ 100, 10 });
     }
 };
 
@@ -38,6 +43,8 @@ class MyAppObserver : public ARA::Application::Observer,
     ARA::Ptr<ARA::Window> mWindow;
     ARA::Ptr<ARA::Font> mFont;
     
+    ARA::Ptr < MyButtonList > mButtonList;
+    
 public:
     
     MyAppObserver():
@@ -46,6 +53,12 @@ public:
     })
     {
         setPadding({ 10.0, 10.0, 10.0, 10.0 });
+        setBackgroundColor({ 0.8, 0.3, 0.7, 1.0 });
+        setBorderWidth(1.0);
+        setCornerRadius(ARA::RectCorner::TopRight, 100.0);
+        
+        mButtonList = ARA::MakePtr < MyButtonList >();
+        add(mButtonList);
     }
     
     void onAppReady(ARA::Application& app)
@@ -53,7 +66,7 @@ public:
         mWindow = app.createWindow({ 1024, 768 }, { .resizable = true }, "First App With ARA");
         
         mWindow->setObserver(std::dynamic_pointer_cast<ARA::Window::Observer>(shared_from_this()));
-        mWindow->setContentView(view());
+        mWindow->setContentElement(shared_from_this());
         
         mWindow->show();
         mWindow->center();
@@ -86,15 +99,9 @@ public:
     
 protected:
     
-    ARA::Ptr<ARA::View> createView(ARA::Application& app)
+    virtual void layoutChildren(ARA::View& view) const
     {
-        auto view = ARA::Element::createView(app);
-        
-        setBackgroundColor({ 0.8, 0.3, 0.7, 1.0 });
-        setBorderWidth(1.0);
-        setCornerRadius(ARA::RectCorner::TopRight, 100.0);
-        
-        return view;
+        mButtonList->setFrame(frame());
     }
 };
 

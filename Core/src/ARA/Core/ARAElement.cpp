@@ -7,6 +7,7 @@
 
 #include "ARAElement.h"
 #include "ARAApplication.h"
+#include "ARA/Core/ARAApplication.h"
 
 ARA_BEGIN_NAMESPACE
 
@@ -36,57 +37,6 @@ Element::Element()
     mCornerRadius[3].setValue(0);
 }
 
-Ptr<View> Element::createView(Application& app)
-{
-    auto view = Controller<Element>::createView(app);
-    
-    if (view)
-        view->setObserver(shared_from_this());
-    
-    return view;
-}
-
-void Element::onViewDraw(View& view, Drawer& drawer) const
-{
-    Rect2 rect = backgroundRect(view);
-    
-    Real cornerRadii[4] =
-    {
-        cornerRadius(RectCorner::TopLeft),
-        cornerRadius(RectCorner::TopRight),
-        cornerRadius(RectCorner::BottomLeft),
-        cornerRadius(RectCorner::BottomRight)
-    };
-    
-    // background
-    
-    const Color backgroundColor = this->backgroundColor();
-    
-    if (!backgroundColor.isTransparent())
-    {
-        Ptr<Path> path = view.application().createPath();
-        path->addRoundedRect(rect, cornerRadii);
-        
-        drawBackground(view, drawer, path, backgroundColor);
-    }
-    
-    // borders
-    
-    for (auto& border : mBorders)
-    {
-        const Real width = borderWidth(border.edge);
-        const Color color = borderColor(border.edge);
-        
-        if (!width || color.isTransparent())
-            continue;
-        
-        Ptr<Path> borderPath = view.application().createPath();
-        borderPath->addRoundedEdge(rect, border.edge, cornerRadii);
-        
-        drawBorderEdge(view, drawer, borderPath, border.edge, width, color);
-    }
-}
-
 Color Element::backgroundColor() const
 {
     if (mBackgroundColor.isValue())
@@ -94,7 +44,7 @@ Color Element::backgroundColor() const
     
     else if (mBackgroundColor.isInherits())
     {
-        auto p = mParentNode.lock();
+        auto p = parent();
         
         if (p)
             return p->backgroundColor();
@@ -108,18 +58,18 @@ void Element::setBackgroundColor(const Color& color)
     if (!mBackgroundColor.isEqualTo(color))
     {
         mBackgroundColor.setValue(color);
-        view()->setNeedsDraw(true);
+        view().setNeedsDraw(true);
     }
 }
 
-Rect2 Element::backgroundRect(const View& view) const
+Rect2 Element::backgroundRect() const
 {
-    return view.bounds();
+    return view().bounds();
 }
 
-Ptr<Path> Element::borderPath(const View& view, RectEdge edge) const
+Ptr<Path> Element::borderPath(RectEdge edge) const
 {
-    Rect2 bkgRect = backgroundRect(view);
+    Rect2 bkgRect = backgroundRect();
     Ptr<Path> path = Application::Get().createPath(bkgRect.origin);
     
     Real cornerRadii[4] =
@@ -135,9 +85,10 @@ Ptr<Path> Element::borderPath(const View& view, RectEdge edge) const
     return path;
 }
 
-std::array<Ptr<Path>, 4> Element::borderPathes(const View& view) const
+std::array<Ptr<Path>, 4> Element::borderPathes() const
 {
-    Rect2 bkgRect = backgroundRect(view);
+    auto& app = Application::Get();
+    Rect2 bkgRect = backgroundRect();
     
     std::array<Ptr<Path>, 4> pathes =
     {
@@ -169,7 +120,7 @@ Real Element::cornerRadius(RectCorner corner) const
     
     if (radius.isInherits())
     {
-        auto p = mParentNode.lock();
+        auto p = parent();
         
         if (p)
             return p->cornerRadius(corner);
@@ -185,13 +136,7 @@ void Element::setCornerRadius(RectCorner corner, Real radius)
     if (!mCornerRadius[(int)corner].isEqualTo(radius))
     {
         mCornerRadius[(int)corner].setValue(radius);
-        
-        auto selfView = this->view();
-        
-        if (!selfView)
-            throw ElementError("[ARA::Element] No view for element.");
-        
-        selfView->setNeedsDraw(true);
+        view().setNeedsDraw(true);
     }
 }
 
@@ -201,7 +146,7 @@ Real Element::borderWidth(RectEdge edge) const
     
     if (border.width.isInherits())
     {
-        auto p = mParentNode.lock();
+        auto p = parent();
         
         if (p)
             return p->borderWidth(edge);
@@ -220,7 +165,7 @@ void Element::setBorderWidth(RectEdge edge, const Inheritable<Real>& value)
     if (!border.width.isEqualTo(value))
     {
         border.width = value;
-        view()->setNeedsDraw(true);
+        view().setNeedsDraw(true);
     }
 }
 
@@ -231,7 +176,7 @@ void Element::setBorderWidth(const Inheritable<Real>& value)
         if (!border.width.isEqualTo(value))
         {
             border.width = value;
-            view()->setNeedsDraw(true);
+            view().setNeedsDraw(true);
         }
     }
 }
@@ -242,7 +187,7 @@ Color Element::borderColor(RectEdge edge) const
     
     if (border.color.isInherits())
     {
-        auto p = mParentNode.lock();
+        auto p = parent();
         
         if (p)
             return p->borderColor(edge);
@@ -261,7 +206,7 @@ void Element::setBorderColor(RectEdge edge, const Inheritable < Color >& color)
     if (!border.color.isEqualTo(color))
     {
         border.color = color;
-        view()->setNeedsDraw(true);
+        view().setNeedsDraw(true);
     }
 }
 
@@ -272,17 +217,133 @@ void Element::setBorderColor(const Inheritable < Color >& color)
         if (!border.color.isEqualTo(color))
         {
             border.color = color;
-            view()->setNeedsDraw(true);
+            view().setNeedsDraw(true);
         }
     }
 }
 
-void Element::onViewUpdate(View& view)
+Rect2 Element::frame() const
 {
-    if (view.needsLayoutChildren())
+    return view().frame();
+}
+
+void Element::setFrame(const Rect2& frame)
+{
+    view().setFrame(frame);
+}
+
+void Element::setFrameSize(const Size2& size)
+{
+    setFrame({ frame().origin, size });
+}
+
+void Element::setFrameOrigin(const Point2& origin)
+{
+    setFrame({ origin, frame().size });
+}
+
+size_t Element::numberOfChildren() const
+{
+    return view().childCount();
+}
+
+ViewList Element::childrenViews() const
+{
+    return view().children();
+}
+
+ElementList Element::children() const
+{
+    ElementList elements;
+    ViewList views = childrenViews();
+    
+    elements.reserve(views.size());
+    
+    for (auto& view : views)
+        elements.push_back(dynamic_cast < Element& >(view->controller()).shared_from_this());
+    
+    return elements;
+}
+
+ElementPtr Element::parent() const
+{
+    auto pview = view().parent();
+    
+    if (!pview)
+        return nullptr;
+    
+    auto element = dynamic_cast < Element* >(&pview->controller());
+    
+    if (!element)
+        return nullptr;
+    
+    return element->shared_from_this();
+}
+
+ElementPtr Element::add(const ElementPtr& element, const ElementPtr& before)
+{
+    ThrowIf < Error >(!element, "[ARA::Element] Null element.");
+    
+    if (view().addChild(element->view().shared_from_this(),
+                        before ? before->view().shared_from_this() : nullptr) != nullptr)
+        return element;
+    
+    return nullptr;
+}
+
+void Element::remove(const ElementPtr& element)
+{
+    view().removeChild(element->view().shared_from_this());
+}
+
+void Element::draw(Drawer& drawer) const
+{
+    auto& app = Application::Get();
+    Rect2 rect = backgroundRect();
+    
+    Real cornerRadii[4] =
     {
-        layoutChildren(view);
-        view.setNeedsLayoutChildren(false);
+        cornerRadius(RectCorner::TopLeft),
+        cornerRadius(RectCorner::TopRight),
+        cornerRadius(RectCorner::BottomLeft),
+        cornerRadius(RectCorner::BottomRight)
+    };
+    
+    // background
+    
+    const Color backgroundColor = this->backgroundColor();
+    
+    if (!backgroundColor.isTransparent())
+    {
+        Ptr<Path> path = app.createPath();
+        path->addRoundedRect(rect, cornerRadii);
+        
+        drawBackground(view(), drawer, path, backgroundColor);
+    }
+    
+    // borders
+    
+    for (auto& border : mBorders)
+    {
+        const Real width = borderWidth(border.edge);
+        const Color color = borderColor(border.edge);
+        
+        if (!width || color.isTransparent())
+            continue;
+        
+        Ptr<Path> borderPath = app.createPath();
+        borderPath->addRoundedEdge(rect, border.edge, cornerRadii);
+        
+        drawBorderEdge(view(), drawer, borderPath, border.edge, width, color);
+    }
+}
+
+void Element::update()
+{
+    if (view().needsLayoutChildren())
+    {
+        layoutChildren();
+        view().setNeedsLayoutChildren(false);
     }
 }
 
@@ -309,7 +370,7 @@ void Element::drawBorderEdge(const View &view, Drawer &drawer, const Ptr<Path> &
     drawer.pop();
 }
 
-void Element::layoutChildren(View& view) const
+void Element::layoutChildren() const
 {
     
 }

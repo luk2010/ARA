@@ -11,6 +11,8 @@
 #include "ARAView.h"
 #include "ARAWindowStyle.h"
 
+#include "ARA/Core/ARAElement.h"
+
 ARA_BEGIN_NAMESPACE
 
 //! @brief
@@ -46,11 +48,14 @@ protected:
     
     //! @brief
     //! The Window Observer.
+    //!
     Weak<Observer> mObserver;
     
     //! @brief
-    //! The content view.
-    Ptr<View> mContentView;
+    //! The window content element. This may be null if you only set the window's view. Use
+    //! `setContentElement()` instead of `setContentView()` to set the element.
+    //!
+    ElementPtr mContentElement;
     
 public:
     
@@ -113,16 +118,21 @@ public:
     virtual void setObserver(const Ptr<Observer>& observer);
     
     //! @brief
-    //! Returns the window's content view.
-    inline Ptr<View> contentView() { return mContentView; }
+    //! Returns the window's content element.
+    //!
+    virtual ElementPtr contentElement() const;
     
     //! @brief
-    //! Returns the window's content view.
-    inline Ptr<const View> contentView() const { return mContentView; }
+    //! Sets the window's content element.
+    //!
+    virtual void setContentElement(const ElementPtr& element);
+    
+protected:
     
     //! @brief
-    //! Sets the window's content view.
-    virtual void setContentView(const Ptr<View>& view) = 0;
+    //! Sets the current content view.
+    //!
+    virtual void _setContentView(View& view) = 0;
 };
 
 ARA_END_NAMESPACE

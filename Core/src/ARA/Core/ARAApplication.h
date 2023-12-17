@@ -10,12 +10,15 @@
 
 #include "ARAPlatform.h"
 #include "ARAError.h"
-#include "ARAWindow.h"
 #include "ARAView.h"
 #include "ARAPath.h"
 #include "ARAFont.h"
 
+#include "ARA/Core/ARAWindowStyle.h"
+
 ARA_BEGIN_NAMESPACE
+
+class Window;
 
 //! @brief
 //! The Application Error subclass.
@@ -95,8 +98,12 @@ public:
                                      const std::string& title = {}) = 0;
     
     //! @brief
-    //! Creates a native view.
-    virtual Ptr<View> createView() = 0;
+    //! Creates a native view instance.
+    //!
+    //! @param controller
+    //!     The `ARA::ViewController` instance that manages this view.
+    //!
+    virtual Ptr<View> createView(ViewController& controller) = 0;
     
     //! @brief
     //! Creates a native Path from an origin point.

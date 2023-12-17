@@ -104,9 +104,9 @@ ARA::Ptr<ARA::Window> OSXApplication::createWindow(const ARA::Size2& size, const
     return ARA::MakePtr<OSXWindow>(*this, handle);
 }
 
-ARA::Ptr<ARA::View> OSXApplication::createView()
+ARA::Ptr<ARA::View> OSXApplication::createView(ARA::ViewController& controller)
 {
-    return ARA::MakePtr<OSXView>(*this, [[OSXNSView alloc] initWithView:NULL]);
+    return ARA::MakePtr<OSXView>(*this, controller, [[OSXNSView alloc] initWithView:NULL]);
 }
 
 ARA::Ptr<ARA::Path> OSXApplication::createPath(const ARA::Point2& origin)

@@ -35,7 +35,7 @@ public:
     
     //! @brief
     //! Returns the node's children.
-    inline std::vector<Ptr<Node>> children() const { return mChildrenNodes; }
+    inline std::vector<Ptr<T>> children() const { return mChildrenNodes; }
     
     //! @brief
     //! Returns the number of children.
@@ -107,6 +107,26 @@ public:
             return *it;
         
         return nullptr;
+    }
+    
+    //! @brief
+    //! Calls a given callback for each child of the node.
+    //!
+    template < class Callback >
+    void forEachChild(Callback&& cbk)
+    {
+        for (auto& child : mChildrenNodes)
+            cbk(child);
+    }
+    
+    //! @brief
+    //! Calls a given callback for each child of the node.
+    //!
+    template < class Callback >
+    void forEachChild(Callback&& cbk) const
+    {
+        for (auto& child : mChildrenNodes)
+            cbk(child);
     }
 };
 

@@ -15,7 +15,9 @@
 #define __ARA_COCOA_APPLICATION_H__
 
 #include "ARACocoaPlatform.h"
+
 #include "ARA/Core/ARAApplication.h"
+#include "ARA/Core/ARAWindow.h"
 
 //! @brief
 //! An application object implemented for Cocoa.
@@ -57,7 +59,7 @@ public:
     //! @brief
     //! Creates a native view.
     //!
-    virtual ARA::Ptr<ARA::View> createView();
+    virtual ARA::Ptr<ARA::View> createView(ARA::ViewController& controller);
     
     //! @brief
     //! Creates a native Path from an origin point.

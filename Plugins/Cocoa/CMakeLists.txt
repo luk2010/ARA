@@ -17,6 +17,14 @@ target_link_libraries(
     ARACocoa 
     PUBLIC ARACore ${ARA_COCOA_LIB} ${ARA_COREFOUNDATION_LIB} ${ARA_CORETEXT_LIB})
 
+if(XCODE)
+    set_target_properties(
+        ARACocoa 
+        PROPERTIES 
+        XCODE_ATTRIBUTE_CLANG_ENABLE_OBJC_ARC YES
+        XCODE_ATTRIBUTE_CLANG_ENABLE_OBJC_ARC_EXCEPTIONS YES)
+endif()
+
 install(
     TARGETS ARACocoa
     LIBRARY DESTINATION ${ARA_INSTALL_PREFIX})

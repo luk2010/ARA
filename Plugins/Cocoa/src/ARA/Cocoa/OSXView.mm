@@ -14,8 +14,10 @@
 #include "OSXView.h"
 #include "OSXNSView.h"
 
-OSXView::OSXView(ARA::Application& app, NSView* handle):
-ARA::View(app), mHandle(handle)
+#include "ARA/Core/ViewController.h"
+
+OSXView::OSXView(ARA::Application& app, ARA::ViewController& controller, NSView* handle):
+ARA::View(app, controller), mHandle(handle)
 {
     if ([handle isKindOfClass:[OSXNSView class]])
         [(OSXNSView*)handle setView:this];
@@ -24,51 +26,6 @@ ARA::View(app), mHandle(handle)
 NSView* OSXView::handle() const
 {
     return mHandle;
-}
-
-ARA::Ptr<ARA::View> OSXView::addChild(const ARA::Ptr<ARA::View>& child, const ARA::Ptr<ARA::View>& beforeView)
-{
-    NSView* hdl = dynamic_cast < const OSXView* >(child.get())->handle();
-    NSView* hdlBef = beforeView ? dynamic_cast < const OSXView* >(child.get())->handle() : nil;
-    
-    [mHandle addSubview:hdl
-             positioned:NSWindowBelow
-             relativeTo:hdlBef];
-    
-    mChildrenNodes.insert(std::find(mChildrenNodes.begin(), mChildrenNodes.end(), beforeView), child);
-    setParentView(*child, shared_from_this());
-    
-    auto observer = this->observer();
-    
-    if (observer)
-        observer->onViewAddChild(*this, child);
-    
-    observer = child->observer();
-    
-    if (observer)
-        observer->onViewParentChange(*child, shared_from_this());
-    
-    return child;
-}
-
-void OSXView::removeChild(const ARA::Ptr<ARA::View>& child)
-{
-    NSView* hdl = dynamic_cast < const OSXView* >(child.get())->handle();
-    [hdl removeFromSuperview];
-    
-    setParentView(*child, nullptr);
-    
-    mChildrenNodes.erase(std::find(mChildrenNodes.begin(), mChildrenNodes.end(), child));
-    
-    auto observer = this->observer();
-    
-    if (observer)
-        observer->onViewRemoveChild(*this, child);
-    
-    observer = child->observer();
-    
-    if (observer)
-        observer->onViewParentChange(*child, nullptr);
 }
 
 ARA::Rect2 OSXView::frame() const
@@ -101,4 +58,25 @@ ARA::Rect2 OSXView::bounds() const
 void OSXView::setBounds(const ARA::Rect2& frame)
 {
     [mHandle setBounds:NSMakeRect(frame.origin.x, frame.origin.y, frame.size.width, frame.size.height)];
+}
+
+bool OSXView::_addChild(const ARA::ViewPtr& child, const ARA::ViewPtr& beforeView)
+{
+    NSView* hdl = dynamic_cast < const OSXView* >(child.get())->handle();
+    NSView* hdlBef = beforeView ? dynamic_cast < const OSXView* >(beforeView.get())->handle() : nil;
+    
+    [mHandle addSubview:hdl
+             positioned:NSWindowBelow
+             relativeTo:hdlBef];
+    
+    return true;
+}
+
+bool OSXView::_removeChild(const ARA::ViewPtr& child)
+{
+    NSView* hdl = dynamic_cast < const OSXView* >(child.get())->handle();
+    
+    [hdl removeFromSuperview];
+    
+    return true;
 }

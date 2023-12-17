@@ -14,6 +14,8 @@
 #include "OSXNSView.h"
 #include "OSXDrawer.h"
 
+#include "ARA/Core/ViewController.h"
+
 @implementation OSXNSView
 
 - (instancetype)initWithView:(OSXView *)view
@@ -36,23 +38,15 @@
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-    auto observer = self->view->observer();
+    NSGraphicsContext* context = [NSGraphicsContext currentContext];
+    OSXDrawer drawer(self->view->application(), [NSGraphicsContext currentContext]);
     
-    if (observer)
-    {
-        NSGraphicsContext* context = [NSGraphicsContext currentContext];
-        
-        CGContextConcatCTM(context.CGContext, CGAffineTransformMakeScale(1, -1));
-        CGContextConcatCTM(context.CGContext, CGAffineTransformMakeTranslation(0, -self.frame.size.height));
-        
-        OSXDrawer drawer(self->view->application(), [NSGraphicsContext currentContext]);
-        observer->onViewDraw(*self->view, drawer);
-    }
+    view->draw(drawer);
 }
 
 - (BOOL)isFlipped
 {
-    return NO;
+    return YES;
 }
 
 - (void)mouseDown:(NSEvent *)event

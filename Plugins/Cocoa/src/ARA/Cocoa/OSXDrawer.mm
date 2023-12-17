@@ -54,6 +54,7 @@ void OSXDrawer::setLineWidth(ARA::Real width)
 void OSXDrawer::fillPath(const ARA::Ptr<ARA::Path>& path)
 {
     const OSXPath* ppath = dynamic_cast < const OSXPath* >(path.get());
+    
     CGContextAddPath(mHandle.CGContext, ppath->handle());
     CGContextFillPath(mHandle.CGContext);
 }
@@ -61,6 +62,7 @@ void OSXDrawer::fillPath(const ARA::Ptr<ARA::Path>& path)
 void OSXDrawer::strokePath(const ARA::Ptr<ARA::Path>& path)
 {
     const OSXPath* ppath = dynamic_cast < const OSXPath* >(path.get());
+    
     CGContextAddPath(mHandle.CGContext, ppath->handle());
     CGContextStrokePath(mHandle.CGContext);
 }

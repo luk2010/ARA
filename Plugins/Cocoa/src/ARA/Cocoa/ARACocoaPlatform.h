@@ -19,5 +19,8 @@
 #include <CoreText/CoreText.h>
 
 #include "ARA/Core/ARAPlatform.h"
+#include "ARA/Core/ARAError.h"
 
-#endif 
+ARA_DECLARE_ERROR(OSXError)
+
+#endif

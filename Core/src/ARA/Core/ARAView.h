@@ -18,6 +18,7 @@ ARA_BEGIN_NAMESPACE
 
 class Window;
 class View;
+class ViewController;
 
 typedef Ptr < View > ViewPtr;
 typedef std::vector < ViewPtr > ViewList;
@@ -29,50 +30,13 @@ class View : public std::enable_shared_from_this<View>,
              public ApplicationObject,
              public EventEmitter
 {
-public:
-    
-    //! @brief
-    //! The View Observer.
-    struct Observer : public EventListener
-    {
-        //! @brief
-        //! Destructor.
-        virtual ~Observer() = default;
-        
-        //! @brief
-        //! The view window has changed.
-        virtual void onViewWindowChange(View& view, const Ptr<Window>& window) {}
-        
-        //! @brief
-        //! The view parent has changed.
-        virtual void onViewParentChange(View& view, const Ptr<View>& parent) {}
-        
-        //! @brief
-        //! The view has a new child.
-        virtual void onViewAddChild(View& view, const Ptr<View>& child) {}
-        
-        //! @brief
-        //! The view has removed a child view.
-        virtual void onViewRemoveChild(View& view, const Ptr<View>& child) {}
-        
-        //! @brief
-        //! The view should update.
-        virtual void onViewUpdate(View& view) {}
-        
-        //! @brief
-        //! The view should draw itself.
-        virtual void onViewDraw(View& view, Drawer& drawer) const {}
-    };
-    
 protected:
+    
+    friend class Window;
     
     //! @brief
     //! The current window, if this view is in a window.
     Weak<Window> mWindow;
-    
-    //! @brief
-    //! The view observer.
-    Weak<Observer> mObserver;
     
     //! @brief
     //! Internally sets the parent node.
@@ -94,40 +58,52 @@ protected:
     //!
     AtomBool mNeedsLayoutChildren;
     
+    //! @brief
+    //! The controller that manages this view.
+    //!
+    ViewController& mController;
+    
 public:
     
     //! @brief
-    //! Creates a new View.
+    //! Creates a new View instance.
     //!
-    View(Application& application);
+    //! @param application
+    //!     The `ARA::Application` that creates this view.
+    //! @param controller
+    //!     The `ARA::ViewController` instance that manages this view.
+    //!
+    View(Application& application, ViewController& controller);
     
     //! @brief
     //! Returns the window that holds this view, if available.
+    //!
     inline Ptr<Window> window() { return mWindow.lock(); }
     
     //! @brief
     //! Returns the window that holds this view, if available.
+    //!
     inline Ptr<const Window> window() const { return mWindow.lock(); }
     
     //! @brief
+    //! Returns the view's controller.
+    //!
+    virtual ViewController& controller();
+    
+    //! @brief
+    //! Returns the view's controller.
+    //!
+    virtual const ViewController& controller() const;
+    
+    //! @brief
     //! Adds a child to this view.
-    virtual Ptr<View> addChild(const Ptr<View>& child, const Ptr<View>& beforeView = nullptr) = 0;
+    //!
+    virtual ViewPtr addChild(const ViewPtr& child, const ViewPtr& beforeView = nullptr);
     
     //! @brief
     //! Removes a child from this view.
-    virtual void removeChild(const Ptr<View>& child) = 0;
-    
-    //! @brief
-    //! Returns the current view observer.
-    inline Ptr<Observer> observer() { return mObserver.lock(); }
-    
-    //! @brief
-    //! Returns the current view observer.
-    inline Ptr<const Observer> observer() const { return mObserver.lock(); }
-    
-    //! @brief
-    //! Sets the view current observer.
-    virtual void setObserver(const Ptr<Observer>& observer);
+    //!
+    virtual void removeChild(const ViewPtr& child);
     
     //! @brief
     //! Returns the current view frame.
@@ -177,6 +153,25 @@ public:
     //! Forces the mNeedsLayoutChildren property value.
     //!
     virtual void setNeedsLayoutChildren(bool value);
+    
+    //! @brief
+    //! Calls `controller().draw()` from this public context.
+    //!
+    virtual void draw(ARA::Drawer& drawer) const;
+    
+protected:
+    
+    //! @brief
+    //! Internal implementation of `addChild()` to let platform implementations add the
+    //! child in the underlying system.
+    //!
+    virtual bool _addChild(const ViewPtr& child, const ViewPtr& beforeChild) = 0;
+    
+    //! @brief
+    //! Internal implementation of `removeChild()` to let platform implementations remove the
+    //! child in the underlying system.
+    //!
+    virtual bool _removeChild(const ViewPtr& child) = 0;
 };
 
 ARA_END_NAMESPACE

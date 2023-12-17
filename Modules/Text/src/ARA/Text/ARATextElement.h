@@ -45,16 +45,6 @@ public:
     //!     The attributes for the paragraphs in the element.
     //!
     Element(const String& string, const ParagraphAttributes& paragraphAttributes = {});
-    
-    //! @brief 
-    //! Updates the element frame if needed.
-    //! 
-    virtual void onViewUpdate(View& view);
-
-    //! @brief 
-    //! Draws the element and its text. 
-    //! 
-    virtual void onViewDraw(View& view, Drawer& drawer) const;
 
     //! @brief 
     //! Sets the text padding. 
@@ -88,6 +78,16 @@ public:
     virtual String& string();
     
 protected:
+    
+    //! @brief
+    //! Updates the text element.
+    //!
+    virtual void update();
+    
+    //! @brief
+    //! Draws the text element.
+    //!
+    virtual void draw(ARA::Drawer& drawer) const;
     
     //! @brief
     //! Makes a hit test on the text frame and calls the function `onClick`.

@@ -94,10 +94,12 @@ public:
     //!
     virtual void close();
     
+protected:
+    
     //! @brief
     //! Sets the window's content view.
     //!
-    virtual void setContentView(const ARA::Ptr<ARA::View>& view);
+    virtual void _setContentView(ARA::View& view);
 };
 
 #endif

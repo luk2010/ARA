@@ -21,32 +21,6 @@ mFrame(string, Rect2(), attributes)
 
 }
 
-void Element::onViewUpdate(View& view) 
-{
-    ARA::Element::onViewUpdate(view);
-
-    Rect2 frame = view.bounds();
-    frame.origin.x += mPadding.left;
-    frame.origin.y += mPadding.top;
-    frame.size.width -= mPadding.right + mPadding.left;
-    frame.size.height -= mPadding.bottom + mPadding.top;
-
-    if (frame != mFrame.frame()) 
-        mFrame.setFrame(frame);
-
-    if (mFrame.needsLayout()) 
-    {
-        mFrame.layout();
-        view.setNeedsDraw(true);
-    }
-}
-
-void Element::onViewDraw(View& view, Drawer& drawer) const 
-{
-    ARA::Element::onViewDraw(view, drawer);
-    mFrame.draw(drawer, Point2());
-}
-
 void Element::setPadding(const Rect2Edges& padding) 
 {
     mPadding = padding; 
@@ -70,6 +44,32 @@ const String& Element::string() const
 String& Element::string()
 {
     return mFrame.string();
+}
+
+void Element::update()
+{
+    ARA::Element::update();
+    
+    Rect2 frame = view().bounds();
+    frame.origin.x += mPadding.left;
+    frame.origin.y += mPadding.top;
+    frame.size.width -= mPadding.right + mPadding.left;
+    frame.size.height -= mPadding.bottom + mPadding.top;
+    
+    if (frame != mFrame.frame())
+        mFrame.setFrame(frame);
+    
+    if (mFrame.needsLayout())
+    {
+        mFrame.layout();
+        view().setNeedsDraw(true);
+    }
+}
+
+void Element::draw(Drawer& drawer) const
+{
+    ARA::Element::draw(drawer);
+    mFrame.draw(drawer, Point2());
 }
 
 bool Element::onMouseDown(const MouseDownEvent& event)

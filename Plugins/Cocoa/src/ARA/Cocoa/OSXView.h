@@ -32,22 +32,12 @@ public:
     //! @brief
     //! Creates a new view.
     //!
-    OSXView(ARA::Application& app, NSView* handle);
+    OSXView(ARA::Application& app, ARA::ViewController& controller, NSView* handle);
     
     //! @brief
     //! Returns the NSView handle.
     //!
-    NSView* handle() const; 
-    
-    //! @brief
-    //! Adds a child to this view.
-    //!
-    virtual ARA::Ptr<ARA::View> addChild(const ARA::Ptr<ARA::View>& child, const ARA::Ptr<ARA::View>& beforeView);
-    
-    //! @brief
-    //! Removes a child from this view.
-    //!
-    virtual void removeChild(const ARA::Ptr<ARA::View>& child);
+    NSView* handle() const;
     
     //! @brief
     //! Returns the current view frame.
@@ -78,6 +68,18 @@ public:
     //! Sets the view's bounds.
     //!
     virtual void setBounds(const ARA::Rect2& rect);
+    
+protected:
+    
+    //! @brief
+    //! Adds a child to this view.
+    //!
+    virtual bool _addChild(const ARA::ViewPtr& child, const ARA::ViewPtr& beforeView);
+    
+    //! @brief
+    //! Removes a child from this view.
+    //!
+    virtual bool _removeChild(const ARA::ViewPtr& child);
 };
 
 #endif

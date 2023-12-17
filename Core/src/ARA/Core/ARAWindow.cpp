@@ -31,4 +31,24 @@ void Window::setObserver(const Ptr < Observer >& observer)
     }
 }
 
+ElementPtr Window::contentElement() const
+{
+    return mContentElement;
+}
+
+void Window::setContentElement(const ElementPtr& element)
+{
+    if (mContentElement)
+        mContentElement->didMoveFromWindow();
+    
+    mContentElement.reset();
+    
+    if (element && element->willMoveToWindow(*this))
+    {
+        mContentElement = element;
+        mContentElement->didMoveToWindow();
+        _setContentView(mContentElement->view());
+    }
+}
+
 ARA_END_NAMESPACE

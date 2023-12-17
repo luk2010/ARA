@@ -8,12 +8,19 @@
 #ifndef ARAElement_h
 #define ARAElement_h
 
-#include "ARAController.h"
 #include "ARAView.h"
 #include "ARAElementBorder.h"
 #include "ARARectCorner.h"
 
+#include "ARA/Core/ARAError.h"
+#include "ARA/Core/ViewController.h"
+
 ARA_BEGIN_NAMESPACE
+
+class Element;
+
+typedef Ptr < Element > ElementPtr;
+typedef std::vector < ElementPtr > ElementList;
 
 //! @brief 
 //! An error for an element.
@@ -23,8 +30,11 @@ ARA_DECLARE_ERROR(ElementError)
 //! @brief
 //! An Element is a basic block for drawing native UI elements.
 //!
-class Element : public Controller<Element>, public View::Observer
+class Element : public ViewController, public std::enable_shared_from_this < Element >
 {
+    friend class Window;
+    friend class View;
+    
 protected:
     
     //! @brief
@@ -49,20 +59,7 @@ public:
     //!
     Element();
     
-protected:
-    
-    //! @brief
-    //! Creates a new native view and automatically sets the observer to this
-    //! object.
-    //!
-    virtual Ptr<View> createView(Application& app);
-    
 public:
-    
-    //! @brief
-    //! Draws the view by using the element parameters.
-    //!
-    virtual void onViewDraw(View& view, Drawer& drawer) const;
     
     //! @brief
     //! Returns the element's background color.
@@ -75,21 +72,23 @@ public:
     virtual void setBackgroundColor(const Color& color);
     
     //! @brief
-    //! Returns, for a view, the background frame. Typically, this is the view's
-    //! bounds.
+    //! Returns the local background rectangle.
     //!
-    virtual Rect2 backgroundRect(const View& view) const;
+    virtual Rect2 backgroundRect() const;
     
     //! @brief
     //! Returns a Path suitable to render the background or the view border.
-    virtual Ptr<Path> borderPath(const View& view, RectEdge edge) const;
+    //!
+    virtual Ptr<Path> borderPath(RectEdge edge) const;
     
     //! @brief
     //! Returns the different Path objects needed to render the view background or border.
-    virtual std::array<Ptr<Path>, 4> borderPathes(const View& view) const;
+    //!
+    virtual std::array<Ptr<Path>, 4> borderPathes() const;
     
     //! @brief
     //! Returns the corner radius of a given corner.
+    //! 
     virtual Real cornerRadius(RectCorner corner) const;
     
     //! @brief
@@ -123,11 +122,66 @@ public:
     virtual void setBorderColor(const Inheritable < Color >& color);
     
     //! @brief
-    //! Responds to a view update event.
+    //! Returns the element frame.
     //!
-    virtual void onViewUpdate(View& view);
+    virtual Rect2 frame() const;
+    
+    //! @brief
+    //! Sets the element frame.
+    //!
+    virtual void setFrame(const Rect2& frame);
+    
+    //! @brief
+    //! Sets the element frame size.
+    //!
+    virtual void setFrameSize(const Size2& size);
+    
+    //! @brief
+    //! Sets the element frame origin.
+    //!
+    virtual void setFrameOrigin(const Point2& origin);
+    
+    //! @brief
+    //! Returns the number of children in the element view.
+    //!
+    virtual size_t numberOfChildren() const;
+    
+    //! @brief
+    //! Returns the list of children views.
+    //!
+    virtual ViewList childrenViews() const;
+    
+    //! @brief
+    //! Returns the list of children elements.
+    //!
+    virtual ElementList children() const;
+    
+    //! @brief
+    //! Returns the parent element, or null if no parent is defined.
+    //!
+    virtual ElementPtr parent() const;
+    
+    //! @brief
+    //! Adds an element in the children list.
+    //!
+    virtual ElementPtr add(const ElementPtr& element, const ElementPtr& before = nullptr);
+    
+    //! @brief
+    //! Removes an element from the children list.
+    //!
+    virtual void remove(const ElementPtr& element);
     
 protected:
+    
+    //! @brief
+    //! Updates the view.
+    //!
+    virtual void update();
+    
+    //! @brief
+    //! Draws the view.
+    //!
+    virtual void draw(Drawer& drawer) const;
     
     //! @brief
     //! Draws the view's background.
@@ -142,7 +196,7 @@ protected:
     //! @brief
     //! Layouts the view children.
     //!
-    virtual void layoutChildren(View& view) const;
+    virtual void layoutChildren() const;
 };
 
 ARA_END_NAMESPACE

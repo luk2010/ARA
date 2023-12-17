@@ -12,29 +12,60 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "ARAView.h"
+#include "ARA/Core/ViewController.h"
+#include "ARA/Core/ARAError.h"
 
 ARA_BEGIN_NAMESPACE
 
-View::View(Application& application): 
-ApplicationObject(application), mAcceptsMouseMoveEvents(false), mNeedsLayoutChildren(false)
+View::View(Application& application, ViewController& controller):
+ApplicationObject(application), 
+mController(controller),
+mAcceptsMouseMoveEvents(false),
+mNeedsLayoutChildren(false)
 {
     
 }
 
-void View::setObserver(const Ptr < Observer >& observer)
+ViewController& View::controller()
 {
-    auto old = mObserver.lock();
+    return mController;
+}
+
+const ViewController& View::controller() const
+{
+    return mController;
+}
+
+ViewPtr View::addChild(const ViewPtr& child, const ViewPtr& beforeChild)
+{
+    ThrowIf < Error >(!child, "[View::addChild] Cannot add null child.");
     
-    if (old != observer)
-    {
-        if (old)
-            removeListener(old);
-        
-        mObserver = observer;
-        
-        if (observer)
-            addListener(observer);
-    }
+    if (!child->controller().willMoveToView(*this))
+        return nullptr;
+    
+    ThrowIf < Error >(!_addChild(child, beforeChild), "[View::addChild] Cannot add new child.");
+    
+    mChildrenNodes.insert(std::find(mChildrenNodes.begin(), mChildrenNodes.end(), beforeChild), child);
+    
+    setParentView(*child, shared_from_this());
+    
+    controller().didAddChild(*child);
+    child->controller().didMoveToView();
+    
+    return child;
+}
+
+void View::removeChild(const ViewPtr& child)
+{
+    ThrowIf < Error >(!child, "[View::addChild] Cannot remove null child.");
+    ThrowIf < Error >(!_removeChild(child), "[View::removeChild] Cannot remove child.");
+    
+    setParentView(*child, nullptr);
+    
+    mChildrenNodes.erase(std::find(mChildrenNodes.begin(), mChildrenNodes.end(), child));
+    
+    controller().didRemoveChild(*child);
+    child->controller().didMoveFromView();
 }
 
 void View::setFrame(const Rect2& rect)
@@ -51,10 +82,7 @@ void View::setBounds(const Rect2& rect)
 
 void View::update()
 {
-    auto controller = observer();
-    
-    if (controller)
-        controller->onViewUpdate(*this);
+    mController.update();
     
     for (auto& child : mChildrenNodes)
         child->update();
@@ -78,6 +106,11 @@ bool View::needsLayoutChildren() const
 void View::setNeedsLayoutChildren(bool value)
 {
     mNeedsLayoutChildren.store(value);
+}
+
+void View::draw(ARA::Drawer& drawer) const
+{
+    controller().draw(drawer);
 }
 
 ARA_END_NAMESPACE
