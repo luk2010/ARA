@@ -40,12 +40,12 @@ public:
     //! Returns a pointer to the object the plugin should load.
     Ptr<T> load()
     {
-        typedef Ptr<T> (*LoadPfn) ();
+        typedef T* (*LoadPfn) ();
         LoadPfn function = (LoadPfn) mDynLib->find(ARA_PLUGIN_LOAD_PFN_NAME);
         
         ThrowIf<PluginError>(!function, "Cannot load function of plugin ", mDynLib->filePath(), ".");
         
-        return function();
+        return Ptr < T >(function());
     }
     
     //! @brief

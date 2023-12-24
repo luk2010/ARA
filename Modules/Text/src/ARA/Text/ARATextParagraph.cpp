@@ -42,6 +42,7 @@ Paragraph& Paragraph::operator=(const Paragraph& rhs)
     lineBreakMode = rhs.lineBreakMode;
     interline = rhs.interline;
     alignment = rhs.alignment;
+    return *this;
 }
 
 ARA_TEXT_END_NS

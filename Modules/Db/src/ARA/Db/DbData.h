@@ -18,8 +18,8 @@
 
 ARA_BEGIN_NAMESPACE
 
-typedef std::variant < bool, DbUInteger, DbInteger, DbReal, std::string, BlobPtr > 
-DbDataUnion; 
+typedef std::variant < bool, DbUInteger, DbInteger, DbReal, std::string, BlobPtr, std::nullopt_t >
+DbDataUnion;
 
 //! @brief 
 //! Defines an object that represents a storable data in a database. 
@@ -36,7 +36,7 @@ public:
     //! @brief 
     //! Creates a DbData from a union value.
     //! 
-    DbData(const DbDataUnion& data);
+    DbData(const DbDataUnion& data = std::nullopt);
 
     //! @brief 
     //! Returns true if the data is a boolean. 
@@ -97,6 +97,11 @@ public:
     //! Returns the `ARA::Blob value. 
     //! 
     BlobPtr blob() const;
+    
+    //! @brief
+    //! Returns true if the DbData contains no data.
+    //!
+    bool isEmpty() const; 
 
     //! @brief 
     //! Returns true if this data is equal to a given data. 

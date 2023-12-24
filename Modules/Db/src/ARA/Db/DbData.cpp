@@ -124,10 +124,18 @@ BlobPtr DbData::blob() const
     }
 }
 
+bool DbData::isEmpty() const
+{
+    return mUnion.index() == 6;
+}
+
 bool DbData::operator == (const DbData& rhs) const 
 {
     if (mUnion.index() != rhs.mUnion.index())
         return false; 
+    
+    if (isEmpty())
+        return true;
 
     switch (mUnion.index())
     {
@@ -155,8 +163,8 @@ bool DbData::operator == (const DbData& rhs) const
 
 bool DbData::operator > (const DbData& rhs) const 
 {
-    if (mUnion.index() != rhs.mUnion.index()) 
-        return false; 
+    if (mUnion.index() != rhs.mUnion.index() || isEmpty())
+        return false;
 
     switch (mUnion.index())
     {

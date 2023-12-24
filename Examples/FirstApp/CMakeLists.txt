@@ -6,6 +6,7 @@ target_link_libraries(
     PUBLIC 
         ARAText   
         ARAControls
+        ARADb
 )
 
 install(TARGETS FirstApp DESTINATION ${ARA_INSTALL_PREFIX})

@@ -51,4 +51,51 @@ void Window::setContentElement(const ElementPtr& element)
     }
 }
 
+void Window::setInputElement(const ElementPtr& element)
+{
+    if (mInputElement)
+    {
+        if (!mInputElement->willResignInputElement())
+            return;
+        
+        mInputElement->didResignInputElement();
+        mInputElement.reset();
+    }
+    
+    if (element)
+    {
+        if (!element->willBecomeInputElement())
+            return;
+        
+        mInputElement = element;
+        element->didBecomeInputElement();
+    }
+}
+
+ElementPtr Window::inputElement() const
+{
+    return mInputElement;
+}
+
+bool Window::handleEvent(const Event& event)
+{
+    switch (event.type)
+    {
+        case EventType::KeyDown:
+        case EventType::KeyUp:
+            if (mInputElement)
+                return mInputElement->handleEvent(event);
+            break;
+        default:
+            break;
+    }
+    
+    auto obs = mObserver.lock();
+    
+    if (obs && obs->handleEvent(event))
+        return true;
+    
+    return EventListener::handleEvent(event);
+}
+
 ARA_END_NAMESPACE

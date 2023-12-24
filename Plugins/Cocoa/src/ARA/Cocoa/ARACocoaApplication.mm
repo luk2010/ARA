@@ -17,6 +17,7 @@
 #include "OSXView.h"
 #include "OSXNSView.h"
 #include "OSXWindow.h"
+#include "OSXNSWindow.h"
 
 @interface OSXAppDelegate : NSObject<NSApplicationDelegate>
 {
@@ -29,12 +30,12 @@
 
 @implementation OSXAppDelegate
 
-- (instancetype)initWithApp:(OSXApplication *)app
+- (instancetype)initWithApp:(OSXApplication *)_app
 {
     self = [super init];
     
     if (self)
-        self->app = app;
+        self->app = _app;
     
     return self;
 }
@@ -90,10 +91,10 @@ ARA::Ptr<ARA::Window> OSXApplication::createWindow(const ARA::Size2& size, const
     if (style.resizable) mask |= NSWindowStyleMaskResizable;
     if (style.titled) mask |= NSWindowStyleMaskTitled;
     
-    NSWindow* handle = [[NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, size.width, size.height)
-                                                   styleMask:mask
-                                                     backing:NSBackingStoreBuffered
-                                                       defer:NO];
+    OSXNSWindow* handle = [[OSXNSWindow alloc] initWithContentRect:NSMakeRect(0, 0, size.width, size.height)
+                                                         styleMask:mask
+                                                           backing:NSBackingStoreBuffered
+                                                             defer:NO];
     
     if (style.fullScreen)
         [handle toggleFullScreen:nil];
@@ -101,7 +102,11 @@ ARA::Ptr<ARA::Window> OSXApplication::createWindow(const ARA::Size2& size, const
     if (!title.empty())
         [handle setTitle:[NSString stringWithUTF8String:title.data()]];
     
-    return ARA::MakePtr<OSXWindow>(*this, handle);
+    auto wnd = ARA::MakePtr<OSXWindow>(*this, handle);
+    
+    [handle setOSXWindow:wnd.get()];
+    
+    return wnd;
 }
 
 ARA::Ptr<ARA::View> OSXApplication::createView(ARA::ViewController& controller)

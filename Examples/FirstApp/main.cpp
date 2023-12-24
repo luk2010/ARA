@@ -9,58 +9,11 @@
 #include "ARA/Core/ARAApplication.h"
 #include "ARA/Core/ARAWindow.h"
 #include "ARA/Core/ARAPlugin.h"
-#include "ARA/Text/ARATextElement.h"
 #include "ARA/Core/ElementStyleManager.h"
+
+#include "ARA/Text/ARATextElement.h"
+
 #include "ARA/Controls/Controls.h"
-
-#include "ARA/Db/DbModel.h"
-#include "ARA/Db/DbConnectionPlugin.h"
-
-struct Person 
-{
-    ARA::DbId uid;
-    std::string firstname; 
-    std::string lastname;
-};
-
-class PersonModel : public ARA::DbModel < Person > 
-{
-public: 
-
-    PersonModel(ARA::DbConnection& connection): 
-    DbModel < Person >(connection, "persons")
-    {
-
-    }
-
-    std::future < void > 
-    create(const Person& person, ARA::DbResultPfn cbk) 
-    {
-        return connection().open(":memory:", [&](const ARA::DbResult& res)
-        {
-            if (res.hasError())
-                throw ARA::Error("Cannot open database.");
-            
-            ARA::DbRequest req (ARA::DbRequestType::Create);
-
-            req.add("id", person.uid);
-            req.add("firstname", person.firstname);
-            req.add("lastname", person.lastname);
-
-            connection().execute(req, [&](const ARA::DbResultList& res)
-            {
-                if (res.empty())
-                    throw ARA::Error("No result.");
-
-                else if (res.at(0).hasError())
-                    throw res.at(0).error();
-
-                cbk(res[0]);
-            })
-            .get();
-        });
-    }
-};
 
 class MyButtonStyle : public ARA::ElementStyle
 {
@@ -71,15 +24,6 @@ public:
         setBackgroundColor(ARA::Color{ 0.0, 0.0, 1.0, 0.8 });
         setBorder(1.0, ARA::Color{ 0.0, 0.0, 0.0, 0.8 });
         setCornerRadius(5.0);
-
-        ARA::DbConnectionPlugin SQLPlugin ("libARASQL");
-        ARA::DbConnectionPtr connection = SQLPlugin.load();
-
-        PersonModel(*connection)
-        .create({ .firstname = "Jacques", .lastname = "Tronconi" })
-        .get();
-
-        
     }
 };
 
@@ -178,6 +122,18 @@ protected:
     virtual void layoutChildren() const
     {
         mButtonList->setFrame(bounds());
+    }
+    
+    bool onKeyDown(const ARA::KeyEvent& event)
+    {
+        std::cout << "Key down: " << static_cast < char >(event.character) << std::endl;
+        return true;
+    }
+    
+    bool onKeyUp(const ARA::KeyEvent& event)
+    {
+        std::cout << "Key up: " << event.character << std::endl;
+        return true;
     }
 };
 

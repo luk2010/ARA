@@ -19,7 +19,8 @@ ARA_BEGIN_NAMESPACE
 //! A Window common class.
 class Window : public ApplicationObject,
                public std::enable_shared_from_this<Window>,
-               public EventEmitter
+               public EventEmitter,
+               public EventListener
 {
 public:
     
@@ -56,6 +57,11 @@ protected:
     //! `setContentElement()` instead of `setContentView()` to set the element.
     //!
     ElementPtr mContentElement;
+    
+    //! @brief
+    //! The current input element.
+    //!
+    ElementPtr mInputElement;
     
 public:
     
@@ -126,6 +132,21 @@ public:
     //! Sets the window's content element.
     //!
     virtual void setContentElement(const ElementPtr& element);
+    
+    //! @brief
+    //! Sets the current input element.
+    //!
+    virtual void setInputElement(const ElementPtr& element);
+    
+    //! @brief
+    //! Returns the current input element.
+    //!
+    virtual ElementPtr inputElement() const; 
+    
+    //! @brief
+    //! Handles common window events.
+    //!
+    virtual bool handleEvent(const Event& event);
     
 protected:
     

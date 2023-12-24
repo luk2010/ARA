@@ -74,21 +74,18 @@ void Element::draw(Drawer& drawer) const
 
 bool Element::onMouseDown(const MouseDownEvent& event)
 {
-    View& selfView = const_cast < View& >(dynamic_cast < const View& >(event.emitter));
-    
     // As the location is already relative to the view bounds, we can directly
     // call Frame::hitTest() with the given mouse location.
     
     size_t index = mFrame.hitTest(event.location, true, 0.5);
     
     if (index != InvalidIndex)
-        return onClick(selfView,
-                       event.button,
+        return onClick(event.button,
                        event.location,
                        index,
                        index < mFrame.string().length() ?
                             mFrame.string().at(index) :
-                            InvalidIndex);
+                            0);
     
     return false;
 }

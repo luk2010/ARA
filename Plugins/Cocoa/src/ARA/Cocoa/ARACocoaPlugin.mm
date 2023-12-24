@@ -15,7 +15,7 @@
 #include "ARA/Core/ARAApplication.h"
 #include "ARACocoaApplication.h"
 
-extern "C" ARA::Ptr<ARA::Application> PluginLoad(void)
+extern "C" ARA::Application* PluginLoad(void)
 {
-    return ARA::MakePtr<OSXApplication>();
+    return new OSXApplication;
 }

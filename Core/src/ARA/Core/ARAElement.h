@@ -38,6 +38,11 @@ class Element : public ViewController, public std::enable_shared_from_this < Ele
 protected:
     
     //! @brief
+    //! A weak pointer to the window that directly owns the controller.
+    //!
+    Weak < Window > mWindow;
+    
+    //! @brief
     //! The local background color.
     //!
     Inheritable<Color> mBackgroundColor;
@@ -60,6 +65,16 @@ public:
     Element();
     
 public:
+    
+    //! @brief
+    //! Returns the view window.
+    //!
+    virtual Window& window();
+    
+    //! @brief
+    //! Returns the view window.
+    //!
+    virtual const Window& window() const;
     
     //! @brief
     //! Returns the element's background color.
@@ -202,6 +217,42 @@ protected:
     //! Layouts the view children.
     //!
     virtual void layoutChildren() const;
+    
+    //! @brief
+    //! Returns true if the element accepts the given `Window` as its parent window.
+    //!
+    //! @discussion
+    //! When overriding this function, instead of returning `true`, return a call to
+    //! this method. The default implementation also sets the `mWindow` property before
+    //! returning `true`.
+    //!
+    virtual bool willMoveToWindow(const Window& window);
+    
+    //! @brief
+    //! Called when the element will become the input element.
+    //!
+    //! @return
+    //! True if the element can become the input element, false otherwise.
+    //!
+    virtual bool willBecomeInputElement();
+    
+    //! @brief
+    //! Called when the element did became the input element.
+    //!
+    virtual void didBecomeInputElement();
+    
+    //! @brief
+    //! Called when the element will resign input.
+    //!
+    //! @return
+    //! True if the element can resign input, false otherwise.
+    //!
+    virtual bool willResignInputElement();
+    
+    //! @brief
+    //! Called when the element did resign input.
+    //!
+    virtual void didResignInputElement();
 };
 
 ARA_END_NAMESPACE

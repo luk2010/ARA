@@ -52,6 +52,12 @@ public:
     //!     the data or not. 
     //! 
     Blob(void* data, size_t size, bool destroy = true);
+    
+    //! @brief
+    //! Utility constructor from a `std::vector` object.
+    //!
+    template < class T > Blob(const std::vector < T >& data):
+    Blob(&data[0], sizeof(T) * data.size(), false) { }
 
     //! @brief 
     //! Destroys the blob and the stored data, if allowed to. 

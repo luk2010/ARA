@@ -25,10 +25,10 @@
 
 @implementation OSXWindowDel
 
-- (instancetype)initWithWin:(OSXWindow *)window
+- (instancetype)initWithWin:(OSXWindow *)_window
 {
     self = [super init];
-    self->window = window;
+    self->window = _window;
     return self;
 }
 

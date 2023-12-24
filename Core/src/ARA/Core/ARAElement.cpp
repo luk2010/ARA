@@ -7,7 +7,9 @@
 
 #include "ARAElement.h"
 #include "ARAApplication.h"
+
 #include "ARA/Core/ARAApplication.h"
+#include "ARA/Core/ARAWindow.h"
 
 ARA_BEGIN_NAMESPACE
 
@@ -35,6 +37,40 @@ Element::Element()
     mCornerRadius[1].setValue(0);
     mCornerRadius[2].setValue(0);
     mCornerRadius[3].setValue(0);
+}
+
+Window& Element::window()
+{
+    auto wnd = mWindow.lock();
+    
+    if (!wnd)
+    {
+        auto p = parent();
+        
+        if (!p)
+            throw Error("ARA::Element: No window.");
+    
+        return p->window();
+    }
+    
+    return *wnd;
+}
+
+const Window& Element::window() const
+{
+    auto wnd = mWindow.lock();
+    
+    if (!wnd)
+    {
+        auto p = parent();
+        
+        if (!p)
+            throw Error("ARA::Element: No window.");
+        
+        return p->window();
+    }
+    
+    return *wnd;
 }
 
 Color Element::backgroundColor() const
@@ -376,6 +412,32 @@ void Element::drawBorderEdge(const View &view, Drawer &drawer, const Ptr<Path> &
 }
 
 void Element::layoutChildren() const
+{
+    
+}
+
+bool Element::willMoveToWindow(const Window& window)
+{
+    mWindow = const_cast < Window& >(window).weak_from_this();
+    return true;
+}
+
+bool Element::willBecomeInputElement()
+{
+    return false;
+}
+
+void Element::didBecomeInputElement()
+{
+    
+}
+
+bool Element::willResignInputElement()
+{
+    return true;
+}
+
+void Element::didResignInputElement()
 {
     
 }

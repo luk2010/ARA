@@ -13,6 +13,7 @@
 
 #include "ARA/Core/ViewController.h"
 #include "ARA/Core/ARAApplication.h"
+#include "ARA/Core/ARAWindow.h"
 
 ARA_BEGIN_NAMESPACE
 
