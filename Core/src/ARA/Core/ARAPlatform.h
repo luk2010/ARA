@@ -22,6 +22,7 @@
 #include <array>
 #include <string_view>
 #include <atomic>
+#include <future>
 
 #if defined(__APPLE__)
 

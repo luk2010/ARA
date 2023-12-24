@@ -59,6 +59,11 @@ inline void ThrowIf(bool cnd, Params&&... params)
 //!
 ARA_DECLARE_ERROR(IndexError) 
 
+//! @brief 
+//! An invalid cast has happened.
+//! 
+ARA_DECLARE_ERROR(BadCast)
+
 ARA_END_NAMESPACE
 
 #endif /* ARAError_h */
