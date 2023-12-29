@@ -54,13 +54,7 @@ public:
     //! @brief 
     //! Returns the text padding.
     //! 
-    virtual Rect2Edges padding() const; 
-
-    //! @brief 
-    //! Called when a mouse button has been pressed and has hit a valid character index in 
-    //! the text frame.
-    //! 
-    virtual bool onClick(MouseButton button, const Point2& location, size_t index, Char32 character) { return false; }
+    virtual Rect2Edges padding() const;
     
     //! @brief
     //! Sets the string of the element.
@@ -76,6 +70,16 @@ public:
     //! Returns the string in the text element.
     //!
     virtual String& string();
+    
+    //! @brief
+    //! Returns the text frame.
+    //!
+    virtual const Frame& textFrame() const;
+
+    //! @brief
+    //! Returns the text frame.
+    //!
+    virtual Frame& textFrame(); 
     
 protected:
     
@@ -93,7 +97,15 @@ protected:
     //! Makes a hit test on the text frame and calls the function `onClick`.
     //!
     virtual bool onMouseDown(const MouseDownEvent& event);
+    
+    //! @brief
+    //! Called when a mouse button has been pressed and has hit a valid character index in
+    //! the text frame.
+    //!
+    virtual bool onClick(MouseButton button, const Point2& location, size_t index, Char32 character) { return false; }
 };
+
+typedef Ptr < Element > ElementPtr;
 
 ARA_TEXT_END_NS
 

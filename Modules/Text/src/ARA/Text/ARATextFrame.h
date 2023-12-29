@@ -183,6 +183,29 @@ public:
     //!     right of the hitten character.
     //!
     size_t hitTest(const Point2& location, bool returnCaretIndex = false, Real caretLRRatio = 0.5) const;
+    
+    //! @brief
+    //! For a given character index, return the same index in the above line, or zero if
+    //! there is no line above.
+    //!
+    //! @param index
+    //!     The index in the text string.
+    //!
+    size_t getIndexInLineAbove(size_t index) const; 
+
+    //! @brief
+    //! For a given character index, return the same index in the below line, or the last index 
+    //! if there is no line below.
+    //!
+    //! @param index
+    //!     The index in the text string.
+    //!
+    size_t getIndexInLineBelow(size_t index) const; 
+    
+    //! @brief
+    //! Sets the alignment for the paragraphs in the text frame.
+    //!
+    void setAlignment(Alignment alignment);
 };
 
 ARA_TEXT_END_NS

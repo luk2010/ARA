@@ -18,6 +18,7 @@
 #include "ARA/Core/ARAMouseButton.h"
 #include "ARA/Core/ARARect2.h"
 #include "ARA/Core/ARAKeyModifiersMask.h"
+#include "ARA/Core/KeyCode.h"
 
 ARA_BEGIN_NAMESPACE
 
@@ -190,10 +191,19 @@ struct KeyEvent : public Event
     KeyModifiersMask modifiers;
     
     //! @brief
+    //! The virtual key code.
+    //!
+    KeyCode keyCode;
+    
+    //! @brief
     //! Creates a new Key event instance.
     //!
-    inline KeyEvent(const EventEmitter& emitter, EventType type, Char32 character, KeyModifiersMask modifiers):
-        Event(emitter, type), character(character), modifiers(modifiers) { }
+    inline KeyEvent(const EventEmitter& emitter, 
+                    EventType type,
+                    Char32 character,
+                    KeyCode keyCode,
+                    const KeyModifiersMask& modifiers):
+        Event(emitter, type), character(character), modifiers(modifiers), keyCode(keyCode) { }
 };
 
 ARA_END_NAMESPACE

@@ -83,8 +83,8 @@
     
     // We should be careful that Y coordinates are inverted on OSX.
     
-    CGFloat height = self->view->frame().size.height;
-    location.y = height - location.y;
+    // CGFloat height = self->view->frame().size.height;
+    // location.y = height - location.y;
     
     return location;
 }

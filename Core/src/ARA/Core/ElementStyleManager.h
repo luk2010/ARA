@@ -69,6 +69,29 @@ public:
     //!     The parent style name.
     //!
     ElementStylePtr newStyle(const std::string& name, const std::string& parentName);
+    
+    //! @brief
+    //! Creates a new style of the given class.
+    //!
+    template < class T > Ptr < T > newStyle(const std::string& name, const ElementStylePtr& parent = nullptr)
+    {
+        if (find(name))
+            return nullptr;
+        
+        auto style = MakePtr < T >(name, parent);
+        
+        add(style);
+        
+        return style;
+    }
+    
+    //! @brief
+    //! Creates a new style of the given class.
+    //!
+    template < class T > Ptr < T > newStyle(const std::string& name, const std::string& parentName)
+    {
+        return newStyle < T >(name, find(parentName));
+    }
 };
 
 ARA_END_NAMESPACE

@@ -12,6 +12,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "OSXNSWindow.h"
+#include "ARA/Core/ARAApplication.h"
 
 @implementation OSXNSWindow
 
@@ -24,6 +25,7 @@
 {
     ARA::KeyEvent ke(*_window, ARA::EventType::KeyDown,
                      (ARA::Char32)[event.characters characterAtIndex:0],
+                     ARA::Application::Get().convertKeyCode(event.keyCode),
                      {});
     
     if (!_window->handleEvent(ke))
@@ -34,6 +36,7 @@
 {
     ARA::KeyEvent ke(*_window, ARA::EventType::KeyUp,
                      (ARA::Char32)[event.characters characterAtIndex:0],
+                     ARA::Application::Get().convertKeyCode(event.keyCode),
                      {});
     
     if (!_window->handleEvent(ke))

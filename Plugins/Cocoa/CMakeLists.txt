@@ -14,8 +14,13 @@ target_include_directories(
     PUBLIC ${ARA_HEADERS_PREFIX})
 
 target_link_libraries(
-    ARACocoa 
-    PUBLIC ARACore ${ARA_COCOA_LIB} ${ARA_COREFOUNDATION_LIB} ${ARA_CORETEXT_LIB})
+    ARACocoa
+    PUBLIC 
+        ARACore 
+        ARAHri
+        ${ARA_COCOA_LIB} 
+        ${ARA_COREFOUNDATION_LIB} 
+        ${ARA_CORETEXT_LIB})
 
 if(XCODE)
     set_target_properties(

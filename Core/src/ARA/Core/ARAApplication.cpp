@@ -28,4 +28,15 @@ Application& Application::Get()
     return *mInstance;
 }
 
+bool Application::canCreateRenderView(RenderAPI renderApi) const
+{
+    auto apis = getAvailableRenderAPIs();
+    
+    for (auto api : apis)
+        if (api == renderApi)
+            return true;
+    
+    return false;
+}
+
 ARA_END_NAMESPACE

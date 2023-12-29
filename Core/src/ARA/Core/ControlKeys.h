@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //! @file
-//!     ARA/Core/ARAKeyModifiersMask.h
+//!     ARA/ControlKeys.h
 //! @date
-//!     2023/12/11
+//!     2023/12/29
 //! @author
 //!     Luk2010, Atlanti's Corp
 //! @copyright
@@ -11,26 +11,38 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ARA_CORE_KEYMODIFIERSMASK_H__
-#define __ARA_CORE_KEYMODIFIERSMASK_H__
+#ifndef __ARA_CONTROLKEYS_H__
+#define __ARA_CONTROLKEYS_H__
 
 #include "ARA/Core/ARAPlatform.h"
 
 ARA_BEGIN_NAMESPACE
 
 //! @brief
-//! A bitfield structure that defines available modifiers for a key.
+//! Enumerates basic control keys.
 //!
-struct KeyModifiersMask
+enum class ControlKey
 {
-    bool Shift :1 = false;
-    bool Command :1 = false;
-    bool Control :1 = false;
-    bool Option :1 = false;
-    bool Function :1 = false;
-    bool Windows :1 = false;
+    Unknown,
+    
+    ArrowLeft,
+    ArrowRight,
+    ArrowUp,
+    ArrowDown,
+    
+    Backspace,
+    Return,
+    
+    Tabulate,
+    Shift,
+    CapsLock,
+    Function,
+    Control,
+    Option,
+    Command,
+    Windows
 };
 
 ARA_END_NAMESPACE
 
-#endif
+#endif 

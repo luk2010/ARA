@@ -67,6 +67,8 @@ public:
     virtual GlyphInfo glyphInfo(GlyphIndex index) const = 0;
 };
 
+typedef Ptr < Font > FontPtr;
+
 ARA_END_NAMESPACE
 
 #endif /* ARAFont_h */

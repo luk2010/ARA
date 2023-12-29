@@ -17,11 +17,15 @@
 
 ARA_BEGIN_NAMESPACE
 
+ViewController::ViewController(const Ptr < View >& view)
+{
+    if (view)
+        setView(view);
+}
+
 ViewController::ViewController()
 {
-    mView = Application::Get().createView(*this);
-    mLocalListener = MakePtr < CustomListener >(*this);
-    mView->addListener(mLocalListener);
+    setView(Application::Get().createView(*this));
 }
 
 View& ViewController::view()
@@ -92,6 +96,13 @@ void ViewController::didMoveFromView()
 void ViewController::didMoveFromWindow()
 {
     
+}
+
+void ViewController::setView(const ViewPtr& view)
+{
+    mView = view;
+    mLocalListener = MakePtr < CustomListener >(*this);
+    mView->addListener(mLocalListener);
 }
 
 ARA_END_NAMESPACE

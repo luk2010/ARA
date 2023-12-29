@@ -18,6 +18,7 @@
 ARA_BEGIN_NAMESPACE
 
 class Element;
+class ElementStyle;
 
 typedef Ptr < Element > ElementPtr;
 typedef std::vector < ElementPtr > ElementList;
@@ -190,6 +191,36 @@ public:
     //! Returns the element view bounds.
     //!
     virtual Rect2 bounds() const;
+    
+    //! @brief
+    //! Sets if the element should be redisplayed.
+    //!
+    virtual void setNeedsDisplay(bool value);
+    
+    //! @brief
+    //! Returns if the element currently needs to be redisplayed.
+    //!
+    virtual bool needsDisplay() const; 
+    
+    //! @brief
+    //! Forces the element to relayout itself.
+    //!
+    virtual void setNeedsLayout(bool value);
+    
+    //! @brief
+    //! Returns weither the element as a pending layout.
+    //!
+    virtual bool needsLayout() const;
+    
+    //! @brief
+    //! Sets the given style.
+    //!
+    virtual void setStyle(const ElementStyle& style);
+    
+    //! @brief
+    //! Sets the given style.
+    //!
+    virtual void setStyle(const std::string& name);
     
 protected:
     

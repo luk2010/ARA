@@ -1,0 +1,25 @@
+file(GLOB ARA_HRI_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/ARA/Hri/*.cpp)
+file(GLOB ARA_HRI_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/ARA/Hri/*.h)
+
+add_library(ARAHri SHARED 
+    ${ARA_HRI_HEADERS}
+    ${ARA_HRI_SOURCES})
+
+set_property(
+    TARGET ARAHri 
+    PROPERTY PUBLIC_HEADER ${ARA_HRI_HEADERS})
+
+target_include_directories(
+    ARAHri
+    PUBLIC 
+        ${ARA_HEADERS_PREFIX}
+        ${CMAKE_CURRENT_SOURCE_DIR}/src)
+
+target_link_libraries(
+    ARAHri
+    PUBLIC ARACore)
+
+install(
+    TARGETS ARAHri
+    LIBRARY DESTINATION ${ARA_INSTALL_PREFIX}
+    PUBLIC_HEADER DESTINATION ${ARA_INSTALL_PREFIX}/ARA/Hri)

@@ -76,7 +76,7 @@ bool Control::onMouseDown(const MouseDownEvent& event)
     
     onStateChange(mState);
     
-    return false;
+    return Text::Element::onMouseDown(event);
 }
 
 bool Control::onMouseUp(const MouseUpEvent& event)
@@ -95,7 +95,7 @@ bool Control::onMouseUp(const MouseUpEvent& event)
             return action();
     }
     
-    return false;
+    return Text::Element::onMouseUp(event);
 }
 
 bool Control::onKeyDown(const KeyEvent& event)

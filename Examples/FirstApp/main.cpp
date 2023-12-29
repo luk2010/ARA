@@ -12,6 +12,7 @@
 #include "ARA/Core/ElementStyleManager.h"
 
 #include "ARA/Text/ARATextElement.h"
+#include "ARA/Text/ElementStyle.h"
 
 #include "ARA/Controls/Controls.h"
 
@@ -65,6 +66,42 @@ protected:
     }
 };
 
+class MyForm : public ARA::Element
+{
+    ARA::Controls::InputPtr mInputFirstName;
+    ARA::Controls::InputPtr mInputLastName;
+    
+public:
+    
+    MyForm()
+    {
+        mInputFirstName = ARA::MakePtr < ARA::Controls::Input >(ARA::Text::String("Please type your first name here"));
+        mInputLastName = ARA::MakePtr < ARA::Controls::Input >(ARA::Text::String("Last name here please"));
+        
+        mInputFirstName->setFrameSize({ 250, 60 });
+        mInputLastName->setFrameSize({ 250, 60 });
+        
+        add(mInputFirstName);
+        add(mInputLastName);
+        
+        auto style = ARA::ElementStyleManager::Shared().newStyle < ARA::Text::ElementStyle >("form.input");
+        style->setBackgroundColor(ARA::Color{ 1, 1, 1, 1 });
+        style->setBorder(1.0, ARA::Color{ 0, 0, 0, 1 });
+        style->setPadding(ARA::Rect2Edges{ 10, 10, 10, 10 });
+        
+        mInputFirstName->setStyle("form.input");
+        mInputLastName->setStyle("form.input");
+    }
+    
+protected:
+    
+    virtual void layoutChildren() const
+    {
+        mInputFirstName->setFrameOrigin({ 10, 10 });
+        mInputLastName->setFrameOrigin({ 270, 10 });
+    }
+};
+
 class MyAppObserver : public ARA::Application::Observer,
                       public ARA::Window::Observer,
                       public ARA::Text::Element
@@ -73,6 +110,8 @@ class MyAppObserver : public ARA::Application::Observer,
     ARA::Ptr<ARA::Font> mFont;
     
     ARA::Ptr < MyButtonList > mButtonList;
+    
+    ARA::Ptr < MyForm > mForm;
     
 public:
     
@@ -87,7 +126,10 @@ public:
         setCornerRadius(ARA::RectCorner::TopRight, 100.0);
         
         mButtonList = ARA::MakePtr < MyButtonList >();
-        add(mButtonList);
+        // add(mButtonList);
+        
+        mForm = ARA::MakePtr < MyForm >();
+        add(mForm);
     }
     
     void onAppReady(ARA::Application& app)
@@ -122,33 +164,17 @@ protected:
     virtual void layoutChildren() const
     {
         mButtonList->setFrame(bounds());
-    }
-    
-    bool onKeyDown(const ARA::KeyEvent& event)
-    {
-        std::cout << "Key down: " << static_cast < char >(event.character) << std::endl;
-        return true;
-    }
-    
-    bool onKeyUp(const ARA::KeyEvent& event)
-    {
-        std::cout << "Key up: " << event.character << std::endl;
-        return true;
+        
+        ARA::Rect2 formFr = bounds();
+        formFr.origin = { 200, 40 };
+        formFr.size.height = 100;
+        mForm->setFrame(formFr);
     }
 };
 
 int main(int argc, const char * argv[]) 
 {
-    std::string pluginAppName;
-    
-    if constexpr (ARA::AreEqual(ARA_PLATFORM_NAME, "APPLE"))
-        pluginAppName = "libARACocoa.dylib";
-    else if constexpr (ARA::AreEqual(ARA_PLATFORM_NAME, "WINDOWS"))
-        pluginAppName = "libARAWindows.dylib";
-    else if constexpr (ARA::AreEqual(ARA_PLATFORM_NAME, "X11"))
-        pluginAppName = "libARAX11.dylib";
-    
-    ARA::Plugin<ARA::Application> pluginApp(pluginAppName);
+    ARA::Plugin<ARA::Application> pluginApp(ARA_PLATFORM_DEFAULT_PLUGIN_NAME);
     ARA::Ptr<ARA::Application> app = pluginApp.load();
     
     ARA::ThrowIf<ARA::Error>(!app, "Cannot load application plugin.");

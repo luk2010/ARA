@@ -16,6 +16,7 @@
 
 #include "ARATextPlatform.h"
 #include "ARA/Core/ARARange.h"
+#include "ARA/Core/ControlKeys.h"
 
 ARA_TEXT_BEGIN_NS
 
@@ -211,6 +212,11 @@ public:
     size_t findIndexOfWord(size_t index) const; 
     
     //! @brief
+    //! Returns true if the string is empty.
+    //!
+    bool isEmpty() const; 
+    
+    //! @brief
     //! Returns an iterator to the first character of the string.
     inline auto begin() { return mData.begin(); }
     
@@ -241,6 +247,16 @@ public:
     //! @brief
     //! Returns a reverse iterator to the end of the string.
     inline auto rend() const { return mData.rend(); }
+    
+    //! @brief
+    //! Returns if a UTF-32 character is printable.
+    //!
+    static bool isPrintable(Char32 c);
+    
+    //! @brief
+    //! Tries to convert a UTF-32 character to a ControlKey enum.
+    //!
+    static ControlKey asCtrlKey(Char32 c);
 };
 
 //! @brief

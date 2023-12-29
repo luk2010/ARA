@@ -10,6 +10,8 @@
 
 #include "ARA/Core/ARAApplication.h"
 #include "ARA/Core/ARAWindow.h"
+#include "ARA/Core/ARAElementStyle.h"
+#include "ARA/Core/ElementStyleManager.h"
 
 ARA_BEGIN_NAMESPACE
 
@@ -335,6 +337,41 @@ void Element::remove(const ElementPtr& element)
 Rect2 Element::bounds() const
 {
     return view().bounds();
+}
+
+void Element::setNeedsDisplay(bool value)
+{
+    view().setNeedsDraw(value);
+}
+
+bool Element::needsDisplay() const
+{
+    return view().needsDraw();
+}
+
+void Element::setNeedsLayout(bool value)
+{
+    view().setNeedsLayoutChildren(value);
+}
+
+bool Element::needsLayout() const
+{
+    return view().needsLayoutChildren();
+}
+
+void Element::setStyle(const ElementStyle& style)
+{
+    style.apply(*this);
+}
+
+void Element::setStyle(const std::string& name)
+{
+    auto style = ElementStyleManager::Shared().find(name);
+    
+    if (!style)
+        return;
+    
+    style->apply(*this);
 }
 
 void Element::draw(Drawer& drawer) const

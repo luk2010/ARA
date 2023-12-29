@@ -82,6 +82,16 @@ const GlyphRunList& Line::runs() const
     return mGlyphRuns;
 }
 
+const Range& Line::range() const 
+{
+    return mRange;
+}
+
+bool Line::contains(size_t index) const 
+{
+    return mRange.contains(index);
+}
+
 Line& Line::operator=(const Line& rhs)
 {
     mGlyphRuns = rhs.mGlyphRuns;

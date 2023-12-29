@@ -56,16 +56,34 @@ struct Range
     //!
     inline void remove(const Range& rhs)
     {
-        if (rhs.start < start && rhs.end() > end())
+        if (rhs.start < start)
         {
-            start = 0;
-            length = 0;
+            if (rhs.end() > end())
+            {
+                start = 0;
+                length = 0;
+                return;
+            }
+            
+            start = rhs.end();
+            length = end() - start;
+            start = start - rhs.length;
+            length = length - rhs.length;
+            
             return;
         }
-        
-        start = std::max(start, rhs.start);
-        size_t endr = std::min(end(), rhs.end());
-        length = endr - start;
+        else
+        {
+            if (rhs.end() >= end())
+            {
+                length = rhs.start - start;
+            }
+            else
+            {
+                size_t end = (start + length) - rhs.length;
+                length = end - start;
+            }
+        }
     }
 };
 

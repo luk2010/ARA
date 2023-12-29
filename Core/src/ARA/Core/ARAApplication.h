@@ -15,6 +15,8 @@
 #include "ARAFont.h"
 
 #include "ARA/Core/ARAWindowStyle.h"
+#include "ARA/Core/KeyCode.h"
+#include "ARA/Core/RenderApi.h"
 
 ARA_BEGIN_NAMESPACE
 
@@ -122,6 +124,37 @@ public:
     //! @return
     //! A font instance if the font is found, nullptr otherwise.
     virtual Ptr<Font> createFont(std::string_view familyName, Real size, Font::TraitsMask traits = (Font::TraitsMask)0) = 0;
+
+    //! @brief 
+    //! Returns the KeyCode for the given platform keycode. 
+    //! 
+    virtual KeyCode convertKeyCode(uint32_t keycode) const = 0;
+
+    //! @brief 
+    //! Returns the platform keycode for given KeyCode value.
+    //! 
+    virtual uint32_t convertKeyCode(KeyCode keycode) const = 0;
+
+    //! @brief 
+    //! Returns the default RenderAPI for the current application.
+    //! 
+    virtual RenderAPI getPreferredRenderAPI() const = 0;
+
+    //! @brief 
+    //! Returns the available RenderAPI for the current application.
+    //! 
+    virtual RenderAPIList getAvailableRenderAPIs() const = 0;
+    
+    //! @brief
+    //! Returns true if the application can create a RenderView with the given
+    //! RenderAPI.
+    //!
+    virtual bool canCreateRenderView(RenderAPI renderApi) const;
+    
+    //! @brief
+    //! Creates a RenderView instance conforming to the given RenderAPI.
+    //!
+    virtual ViewPtr createRenderView(RenderAPI renderApi) = 0;
 };
 
 ARA_END_NAMESPACE

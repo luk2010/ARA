@@ -34,6 +34,7 @@ Rect2Edges Element::padding() const
 void Element::setString(const String& string)
 {
     mFrame.setString(string);
+    setNeedsLayout(true);
 }
 
 const String& Element::string() const
@@ -44,6 +45,16 @@ const String& Element::string() const
 String& Element::string()
 {
     return mFrame.string();
+}
+
+const Frame& Element::textFrame() const
+{
+    return mFrame;
+}
+
+Frame& Element::textFrame()
+{
+    return mFrame;
 }
 
 void Element::update()
@@ -79,15 +90,12 @@ bool Element::onMouseDown(const MouseDownEvent& event)
     
     size_t index = mFrame.hitTest(event.location, true, 0.5);
     
-    if (index != InvalidIndex)
-        return onClick(event.button,
-                       event.location,
-                       index,
-                       index < mFrame.string().length() ?
-                            mFrame.string().at(index) :
-                            0);
-    
-    return false;
+    return onClick(event.button,
+                   event.location,
+                   index == InvalidIndex ? 0 : index,
+                   index < mFrame.string().length() ?
+                        mFrame.string().at(index) :
+                        0);
 }
 
 ARA_TEXT_END_NS

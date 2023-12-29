@@ -20,7 +20,7 @@
 //! @brief
 //! A `ARA::View` implemented with Cocoa `NSView` handle.
 //!
-class OSXView : public ARA::View
+class OSXView : virtual public ARA::View
 {
     //! @brief
     //! The view handle.

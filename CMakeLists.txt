@@ -7,7 +7,9 @@ set(ARA_INSTALL_PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 set(ARA_HEADERS_PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/Core/src)
 
 set(ARA_MODULES_PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/Modules/Controls/src
-                       ${CMAKE_CURRENT_SOURCE_DIR}/Modules/Text/src)
+                       ${CMAKE_CURRENT_SOURCE_DIR}/Modules/Text/src
+                       ${CMAKE_CURRENT_SOURCE_DIR}/Modules/Db/src
+                       ${CMAKE_CURRENT_SOURCE_DIR}/Modules/Hri/src)
 
 project(ARA-SDK
     VERSION 0.0.1

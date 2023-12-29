@@ -30,6 +30,9 @@ void Frame::insert(size_t index, const String& string)
 {
     mString.insert(index, string);
     
+    if (index > 0)
+        index = index;
+    
     if (string.length())
     {
         // We need to parse the string to know the list of paragraphs.
@@ -48,7 +51,7 @@ void Frame::insert(size_t index, const String& string)
         {
             // Now we need to find the paragraph at given range.
             
-            Paragraph& paragraphAtIndex = getParagraphAtIndex(index);
+            Paragraph& paragraphAtIndex = getParagraphAtIndex(index ? index - 1 : 0);
             
             // We need to insert the first string range in the paragraph.
             
@@ -147,6 +150,9 @@ void Frame::remove(size_t index, size_t count)
     
     if (mParagraphs.size() > paragraphsToRemove.size())
     {
+        if (paragraphsToRemove.empty())
+            return;
+        
         std::vector<Paragraph> newParagraphs;
         newParagraphs.reserve(mParagraphs.size() - paragraphsToRemove.size());
         
@@ -529,7 +535,10 @@ bool Frame::needsLayout() const
 
 size_t Frame::hitTest(const Point2& location, bool returnCaretIndex, Real caretLRRatio) const
 {
-    for (auto& paragraph : mParagraphs) 
+    std::cout << "HitTest for point at location: " << location << std::endl
+              << "Current text frame: " << mRect << std::endl;
+    
+    for (auto& paragraph : mParagraphs)
     {
         Rect2 parRect = { paragraph.origin, paragraph.size };
 
@@ -576,6 +585,90 @@ size_t Frame::hitTest(const Point2& location, bool returnCaretIndex, Real caretL
     }
 
     return InvalidIndex;
+}
+
+size_t Frame::getIndexInLineAbove(size_t index) const
+{
+    auto& paragraph = getParagraphAtIndex(index);
+
+    for (size_t lineId = 0; lineId < paragraph.lines.size(); ++lineId) 
+    {
+        const Line& line = paragraph.lines[lineId];
+
+        if (line.contains(index)) 
+        {
+            if (lineId == 0)
+            {
+                auto paragraphId = getIndexOfParagraph(paragraph);
+
+                if (paragraphId == 0)
+                    return 0;
+
+                size_t lineOffset = index - line.range().start;
+                const Line& lastLine = *mParagraphs[paragraphId].lines.rbegin();
+
+                return lastLine.range().start + lineOffset;
+            }
+
+            else 
+            {
+                size_t lineOffset = index - line.range().start;
+                const Line& previousLine = paragraph.lines[lineId - 1];
+
+                return previousLine.range().start + lineOffset;
+            }
+        }
+    }
+
+    return 0;
+}
+
+size_t Frame::getIndexInLineBelow(size_t index) const 
+{
+    auto& paragraph = getParagraphAtIndex(index);
+    size_t paragraphId = getIndexOfParagraph(paragraph);
+
+    for (size_t lineId = 0; lineId < paragraph.lines.size(); ++lineId)
+    {
+        const Line& line = paragraph.lines[lineId];
+
+        if (line.contains(index)) 
+        {
+            if (lineId == paragraph.lines.size() - 1) 
+            {
+                if (paragraphId == mParagraphs.size() - 1)
+                    return line.range().end();
+                
+                const Paragraph& nextParagraph = mParagraphs[paragraphId + 1];
+                const Line& firstLine = *nextParagraph.lines.begin();
+                const size_t lineOffset = index - line.range().start;
+
+                return firstLine.range().start + lineOffset;
+            }
+            else 
+            {
+                const Line& nextLine = paragraph.lines[lineId + 1];
+                const size_t lineOffset = index - line.range().start;
+
+                return nextLine.range().start + lineOffset;
+            }
+        }
+    }
+
+    return 0;
+}
+
+void Frame::setAlignment(Alignment alignment)
+{
+    for (auto& paragraph : mParagraphs)
+    {
+        if (paragraph.alignment != alignment)
+        {
+            paragraph.alignment = alignment;
+            paragraph.needsLayout = true;
+        }
+    }
+    mDefAttributes.alignment = alignment;
 }
 
 ARA_TEXT_END_NS

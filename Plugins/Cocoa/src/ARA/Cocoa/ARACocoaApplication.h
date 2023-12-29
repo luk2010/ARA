@@ -80,6 +80,26 @@ public:
     //! A font instance if the font is found, nullptr otherwise.
     //! 
     virtual ARA::Ptr<ARA::Font> createFont(std::string_view familyName, ARA::Real size, ARA::Font::TraitsMask traits);
+    
+    //! @brief
+    //! Returns the KeyCode for the given platform keycode.
+    //!
+    virtual ARA::KeyCode convertKeyCode(uint32_t keycode) const;
+    
+    //! @brief
+    //! Returns the platform keycode for given KeyCode value.
+    //!
+    virtual uint32_t convertKeyCode(ARA::KeyCode keycode) const;
+    
+    //! @brief
+    //! Returns the default RenderAPI for the current application.
+    //!
+    virtual ARA::RenderAPI getPreferredRenderAPI() const;
+    
+    //! @brief
+    //! Returns the available RenderAPI for the current application.
+    //!
+    virtual ARA::RenderAPIList getAvailableRenderAPIs() const;
 };
 
 #endif

@@ -16,5 +16,6 @@
 
 #include "Control.h"
 #include "Button.h"
+#include "Input.h"
 
 #endif

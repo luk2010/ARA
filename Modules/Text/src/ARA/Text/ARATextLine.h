@@ -114,6 +114,16 @@ public:
     //! Returns the runs in the line.
     //!
     const GlyphRunList& runs() const; 
+
+    //! @brief 
+    //! Returns the line's range.
+    //! 
+    const Range& range() const; 
+
+    //! @brief 
+    //! Returns true if the given character index is present in the line's range.
+    //! 
+    bool contains(size_t index) const; 
     
     //! @brief
     //! Copies the given line data.

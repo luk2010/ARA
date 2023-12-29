@@ -66,6 +66,13 @@ class ViewController : public EventListener
     //!
     EventListenerPtr mLocalListener;
     
+protected:
+    
+    //! @brief
+    //! Creates a new controller instance with its own view.
+    //!
+    ViewController(const Ptr < View >& view);
+    
 public:
     
     //! @brief
@@ -156,6 +163,11 @@ protected:
     //! Notifiates the view it has been detached from its parent window.
     //!
     virtual void didMoveFromWindow();
+    
+    //! @brief
+    //! Sets the current view for the controller.
+    //!
+    virtual void setView(const ViewPtr& view);
 };
 
 ARA_END_NAMESPACE

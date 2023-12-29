@@ -180,8 +180,16 @@ void String::insert(size_t index, const std::string_view& utf8str, bool usePrevi
 {
     auto utf32str = utf8_to_utf32(utf8str);
     
+    CharAttributes usedAttributes = attributes;
+    
+    if (usePreviousAttributes)
+    {
+        if (!mData.empty())
+            usedAttributes = mAttributes[index];
+    }
+    
     mData.insert(mData.begin() + index, utf32str.begin(), utf32str.end());
-    mAttributes.insert(mAttributes.begin() + index, usePreviousAttributes ? mAttributes[index] : attributes);
+    mAttributes.insert(mAttributes.begin() + index, usedAttributes);
 }
 
 void String::insert(size_t index, const String& str)
@@ -237,9 +245,49 @@ size_t String::findIndexOfWord(size_t index) const
     return index;
 }
 
+bool String::isEmpty() const
+{
+    return mData.empty();
+}
+
 std::ostream& operator << (std::ostream& stream, const String& string)
 {
     return stream << string.utf8();
+}
+
+bool String::isPrintable(Char32 c)
+{
+    return !(c >= 0 && c <= 31) && !(c >= 127 && c <= 159) && !(c >= 0x0000200B && c <= 0x0000200F);
+}
+
+ControlKey String::asCtrlKey(Char32 c)
+{
+    switch (c)
+    {
+        case 0x00002190:
+            return ControlKey::ArrowLeft;
+            
+        case 0x00002192:
+            return ControlKey::ArrowRight;
+            
+        case 0x00002191:
+            return ControlKey::ArrowUp;
+            
+        case 0x00002193:
+            return ControlKey::ArrowDown;
+            
+        case 0x00000008:
+            return ControlKey::Backspace;
+            
+        case 0x0000000D:
+            return ControlKey::Return;
+            
+        case 0x00000009:
+            return ControlKey::Tabulate;
+            
+        default:
+            return ControlKey::Unknown;
+    }
 }
 
 ARA_TEXT_END_NS
