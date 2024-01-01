@@ -19,7 +19,7 @@
 OSXView::OSXView(ARA::Application& app, ARA::ViewController& controller, NSView* handle):
 ARA::View(app, controller), mHandle(handle)
 {
-    if ([handle isKindOfClass:[OSXNSView class]])
+    if (handle && [handle isKindOfClass:[OSXNSView class]])
         [(OSXNSView*)handle setView:this];
 }
 

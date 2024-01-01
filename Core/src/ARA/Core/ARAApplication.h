@@ -17,6 +17,9 @@
 #include "ARA/Core/ARAWindowStyle.h"
 #include "ARA/Core/KeyCode.h"
 #include "ARA/Core/RenderApi.h"
+#include "ARA/Core/RenderView.h"
+#include "ARA/Core/RenderViewController.h"
+#include "ARA/Core/Factory.h"
 
 ARA_BEGIN_NAMESPACE
 
@@ -57,17 +60,24 @@ private:
     
     //! @brief
     //! The current application instance.
-    static Application* mInstance;
+    static Ptr < Application > mInstance;
     
-public:
+protected:
     
     //! @brief
     //! Creates a new application.
     Application();
     
+public:
+    
     //! @brief
     //! Destructs the application.
     virtual ~Application();
+    
+    //! @brief
+    //! Returns the current instance, or create it if none were found.
+    //!
+    static Application& CreateOrGet();
     
     //! @brief
     //! Returns the current application.
@@ -154,8 +164,12 @@ public:
     //! @brief
     //! Creates a RenderView instance conforming to the given RenderAPI.
     //!
-    virtual ViewPtr createRenderView(RenderAPI renderApi) = 0;
+    virtual RenderViewPtr createRenderView(RenderAPI renderApi, RenderViewController& controller) = 0;
 };
+
+typedef Ptr < Application > ApplicationPtr;
+typedef std::function < ApplicationPtr() > ApplicationConstructor;
+typedef SingleFactory < std::string, ApplicationConstructor > ApplicationFactory;
 
 ARA_END_NAMESPACE
 

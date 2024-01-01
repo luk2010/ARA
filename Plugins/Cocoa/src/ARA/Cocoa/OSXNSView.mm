@@ -18,7 +18,7 @@
 
 @implementation OSXNSView
 
-- (instancetype)initWithView:(OSXView *)view
+- (instancetype)initWithView:(ARA::View*)view
 {
     self = [super initWithFrame:NSZeroRect];
     
@@ -31,7 +31,7 @@
     return self;
 }
 
-- (void)setView:(OSXView*)view
+- (void)setView:(ARA::View*)view
 {
     self->view = view; 
 }
@@ -79,7 +79,7 @@
 
 - (NSPoint)translateEventLocation:(NSPoint)location
 {
-    location = [self->view->handle() convertPoint:location fromView:nil];
+    location = [self convertPoint:location fromView:nil];
     
     // We should be careful that Y coordinates are inverted on OSX.
     

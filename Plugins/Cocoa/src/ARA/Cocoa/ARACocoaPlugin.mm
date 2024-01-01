@@ -15,7 +15,18 @@
 #include "ARA/Core/ARAApplication.h"
 #include "ARACocoaApplication.h"
 
-extern "C" ARA::Application* PluginLoad(void)
+ARA::ApplicationConstructor OSXAppConstructor = []()
 {
-    return new OSXApplication;
+    return ARA::MakePtr < OSXApplication >();
+};
+
+extern "C" bool PluginInstall(void)
+{
+    ARA::ApplicationFactory::Get().add("OSXApplication", OSXAppConstructor);
+    return true;
+}
+
+extern "C" void PluginUninstall(void)
+{
+    ARA::ApplicationFactory::Get().remove("OSXApplication");
 }

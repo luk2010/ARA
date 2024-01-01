@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //! @file
-//!     ARA/Cocoa/OSXRenderView.h
+//!     ARA/Cocoa/Metal/Platform.h
 //! @date
 //!     2023/12/29
 //! @author
@@ -11,18 +11,10 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ARA_COCOA_OSXRENDERVIEW_H__
-#define __ARA_COCOA_OSXRENDERVIEW_H__
+#ifndef __ARA_COCOA_METAL_PLATFORM_H__
+#define __ARA_COCOA_METAL_PLATFORM_H__
 
-#include "ARA/Hri/RenderView.h"
-#include "OSXView.h"
+#include <QuartzCore/CAMetalLayer.h>
+#include <Metal/Metal.h>
 
-//! @brief
-//! A RenderView implemented with Metal and Cocoa.
-//!
-class OSXRenderView : public OSXView, public ARA::Hri::RenderView
-{
-    
-};
-
-#endif
+#endif 

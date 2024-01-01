@@ -53,7 +53,20 @@
 
 //! @brief
 //! The name of the function a Plugin shall declare to be read by ARA::Plugin.
+//!
+//! @deprecated
+//!
 #define ARA_PLUGIN_LOAD_PFN_NAME "PluginLoad"
+
+//! @brief
+//! The name of the Plugin install function.
+//!
+#define ARA_PLUGIN_INSTALL_PFN_NAME "PluginInstall"
+
+//! @brief
+//! The name of the Plugin uninstall function.
+//!
+#define ARA_PLUGIN_UNINSTALL_PFN_NAME "PluginUninstall"
 
 ARA_BEGIN_NAMESPACE
 

@@ -14,18 +14,19 @@
 #ifndef __ARA_COCOA_OSXNSVIEW_H__
 #define __ARA_COCOA_OSXNSVIEW_H__
 
-#include "OSXView.h"
+#include "ARA/Core/ARAView.h"
+#include "ARACocoaPlatform.h"
 
 @interface OSXNSView : NSView
 {
-    OSXView* view;
+    ARA::View* view;
     NSTrackingRectTag trackingRect;
     bool wasAcceptingMouseEvent;
 }
 
-- (instancetype) initWithView:(OSXView*)view;
+- (instancetype) initWithView:(ARA::View*)view;
 
-- (void) setView:(OSXView*)view;
+- (void) setView:(ARA::View*)view;
 
 @end 
 

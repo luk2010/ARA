@@ -100,6 +100,11 @@ public:
     //! Returns the available RenderAPI for the current application.
     //!
     virtual ARA::RenderAPIList getAvailableRenderAPIs() const;
+    
+    //! @brief
+    //! Creates a RenderView instance conforming to the given RenderAPI.
+    //!
+    virtual ARA::RenderViewPtr createRenderView(ARA::RenderAPI renderApi, ARA::RenderViewController& controller);
 };
 
 #endif

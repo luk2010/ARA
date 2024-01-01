@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //! @file
-//!     ARA/Hri/RenderViewController.h
+//!     ARA/Core/RenderViewController.h
 //! @date
 //!     2023/12/29
 //! @author
@@ -11,22 +11,26 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ARA_HRI_RENDERVIEWCONTROLLER_H__
-#define __ARA_HRI_RENDERVIEWCONTROLLER_H__
+#ifndef __ARA_CORE_RENDERVIEWCONTROLLER_H__
+#define __ARA_CORE_RENDERVIEWCONTROLLER_H__
 
-#include "ARA/Hri/Platform.h"
-#include "ARA/Hri/RenderView.h"
+#include "ARA/Core/RenderView.h"
 #include "ARA/Core/ViewController.h"
 #include "ARA/Core/RenderApi.h"
+#include "ARA/Core/ARAError.h"
 
-ARA_HRI_BEGIN_NS
+ARA_BEGIN_NAMESPACE
+
+ARA_DECLARE_ERROR(RenderAPINotSupported)
 
 //! @brief 
-//! A Controller for a `ARA::Hri::RenderView`.
+//! A Controller for a `ARA::RenderView`.
 //! 
 class RenderViewController : public ARA::ViewController
 {
-public: 
+    friend class RenderView;
+    
+public:
 
     //! @brief 
     //! Creates a new RenderViewController instance, along with its RenderView. 
@@ -35,6 +39,11 @@ public:
     //!     The RenderAPI that must be used to create the RenderView. 
     //!
     RenderViewController(RenderAPI renderApi);
+    
+    //! @brief
+    //! Called when the RenderView is resized.
+    //!
+    virtual void drawableResize(const Size2& size);
 
 protected:
 
@@ -44,6 +53,6 @@ protected:
     virtual void render(RenderView& view);
 };
 
-ARA_HRI_END_NS
+ARA_END_NAMESPACE
 
 #endif 

@@ -22,8 +22,6 @@
 
 ARA_HRI_BEGIN_NS
 
-ARA_DECLARE_ERROR(RenderAPINotSupported)
-
 ARA_HRI_END_NS
 
 #endif 

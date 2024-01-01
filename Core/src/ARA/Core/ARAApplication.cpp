@@ -9,18 +9,28 @@
 
 ARA_BEGIN_NAMESPACE
 
-Application* Application::mInstance = NULL;
+ApplicationPtr Application::mInstance;
 
 Application::Application()
 {
-    if (mInstance)
-        throw ApplicationError("[ARA::Application] An Application is already constructed.");
-    mInstance = this;
+    
 }
 
 Application::~Application()
 {
-    mInstance = NULL;
+
+}
+
+Application& Application::CreateOrGet()
+{
+    if (!mInstance)
+    {
+        auto& constructors = ApplicationFactory::Get().constructors();
+        auto first = (*constructors.begin()).second;
+        mInstance = first();
+    }
+    
+    return *mInstance;
 }
 
 Application& Application::Get()

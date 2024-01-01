@@ -19,6 +19,10 @@
 #include "OSXWindow.h"
 #include "OSXNSWindow.h"
 
+#if ARA_OSX_WITH_METAL
+#include "Metal/RenderView.h"
+#endif 
+
 static std::map < uint32_t, ARA::KeyCode > keycodeToARA =
 {
     { 0x00, ARA::KeyCode::A },
@@ -244,5 +248,25 @@ ARA::RenderAPI OSXApplication::getPreferredRenderAPI() const
 
 ARA::RenderAPIList OSXApplication::getAvailableRenderAPIs() const
 {
-    return { ARA::RenderAPI::Metal };
+    return {
+#       if ARA_OSX_WITH_METAL
+        ARA::RenderAPI::Metal,
+#       endif
+#       if ARA_OSX_WITH_OPENGL
+        ARA::RenderAPI::OpenGl,
+#       endif
+    };
+}
+
+ARA::RenderViewPtr OSXApplication::createRenderView(ARA::RenderAPI renderApi, ARA::RenderViewController& controller)
+{
+    switch (renderApi)
+    {
+#       if ARA_OSX_WITH_METAL
+        case ARA::RenderAPI::Metal:
+            return ARA::MakePtr < RenderViewMTL >(*this, controller);
+#       endif
+        default:
+            return nullptr;
+    }
 }

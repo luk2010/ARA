@@ -174,13 +174,11 @@ protected:
 
 int main(int argc, const char * argv[]) 
 {
-    ARA::Plugin<ARA::Application> pluginApp(ARA_PLATFORM_DEFAULT_PLUGIN_NAME);
-    ARA::Ptr<ARA::Application> app = pluginApp.load();
-    
-    ARA::ThrowIf<ARA::Error>(!app, "Cannot load application plugin.");
+    ARA::Plugin Plugin(ARA_PLATFORM_DEFAULT_PLUGIN_NAME, true);
+    ARA::Application& app = ARA::Application::CreateOrGet();
     
     ARA::Ptr<MyAppObserver> observer = ARA::MakePtr<MyAppObserver>();
-    app->setObserver(observer);
+    app.setObserver(observer);
     
-    return app->run(argc, argv);
+    return app.run(argc, argv);
 }

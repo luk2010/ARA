@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //! @file
-//!     ARA/Hri/RenderViewController.cpp
+//!     ARA/Core/RenderViewController.cpp
 //! @date
 //!     2023/12/29
 //! @author
@@ -11,10 +11,10 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "ARA/Hri/RenderViewController.h"
+#include "ARA/Core/RenderViewController.h"
 #include "ARA/Core/ARAApplication.h"
 
-ARA_HRI_BEGIN_NS
+ARA_BEGIN_NAMESPACE
 
 RenderViewController::RenderViewController(RenderAPI renderApi) 
 {
@@ -23,7 +23,12 @@ RenderViewController::RenderViewController(RenderAPI renderApi)
     if (!app.canCreateRenderView(renderApi))
         throw RenderAPINotSupported("RenderViewController: RenderAPI ", (int)renderApi, " not supported.");
     
-    setView(app.createRenderView(renderApi));
+    setView(app.createRenderView(renderApi, *this));
+}
+
+void RenderViewController::drawableResize(const Size2& size)
+{
+    
 }
 
 void RenderViewController::render(RenderView& view)
@@ -31,4 +36,4 @@ void RenderViewController::render(RenderView& view)
     
 }
 
-ARA_HRI_END_NS
+ARA_END_NAMESPACE

@@ -14,46 +14,83 @@ ARA_BEGIN_NAMESPACE
 
 //! @brief
 //! An Error launched by a Plugin.
+//!
 ARA_DECLARE_ERROR(PluginError)
 
 //! @brief
+//! The install or the uninstall function has not been found.
+//!
+ARA_DECLARE_ERROR(PluginPfnNotFound)
+
+//! @brief
+//! The `install` method definition.
+//!
+typedef bool (*PluginInstallPfn) ();
+
+//! @brief
+//! The `uninstall` method definition.
+//!
+typedef void (*PluginUninstallPfn) ();
+
+//! @brief
 //! A Class that uses a DynLib object to load a plugin.
-template < class T >
+//!
+//! A Plugin must have two functions: install() and uninstall. The functions names are
+//! defined into `ARAPlatform.h`.
+//!
 class Plugin
 {
     //! @brief
     //! The dynamic library object.
+    //!
     Ptr<DynLib> mDynLib;
+    
+    //! @brief
+    //! The `install` function.
+    //!
+    PluginInstallPfn mInstallPfn;
+    
+    //! @brief
+    //! The `uninstall` function.
+    //!
+    PluginUninstallPfn mUninstallPfn;
+    
+    //! @brief
+    //! A boolean true if the Plugin has been installed successfully.
+    //!
+    bool mInstalled;
     
 public:
     
     //! @brief
     //! Constructs a new Plugin.
+    //!
     //! @param filePath
-    //! The path to the plugin library.
-    Plugin(const std::string& filePath)
-    {
-        mDynLib = MakePtr<DynLib>(filePath);
-    }
+    //!     The path to the plugin library.
+    //! @param autoinstall
+    //!     Call `install()` directly after loading the library.
+    //!
+    Plugin(const std::string& filePath, bool autoinstall = false);
     
     //! @brief
-    //! Returns a pointer to the object the plugin should load.
-    Ptr<T> load()
-    {
-        typedef T* (*LoadPfn) ();
-        LoadPfn function = (LoadPfn) mDynLib->find(ARA_PLUGIN_LOAD_PFN_NAME);
-        
-        ThrowIf<PluginError>(!function, "Cannot load function of plugin ", mDynLib->filePath(), ".");
-        
-        return Ptr < T >(function());
-    }
+    //! Destroys the Plugin and uninstall it if it was installed.
+    //!
+    ~Plugin();
     
     //! @brief
     //! Returns the dynamic library file path.
-    const std::string& filePath() const
-    {
-        return mDynLib->filePath();
-    }
+    //!
+    const std::string& filePath() const;
+    
+    //! @brief
+    //! Installs the Plugin.
+    //!
+    bool install();
+    
+    //! @brief
+    //! Uninstall the Plugin.
+    //!
+    void uninstall();
 };
 
 ARA_END_NAMESPACE

@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //! @file
-//!     ARA/Cocoa/OSXView.h
+//!     ARA/Cocoa/Metal/RenderView.h
 //! @date
-//!     2023/12/08
+//!     2023/12/30
 //! @author
 //!     Luk2010, Atlanti's Corp
 //! @copyright
@@ -11,28 +11,28 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ARA_COCOA_OSXVIEW_H__
-#define __ARA_COCOA_OSXVIEW_H__
+#ifndef __ARA_COCOA_METAL_RENDERVIEW_H__
+#define __ARA_COCOA_METAL_RENDERVIEW_H__
 
-#include "ARACocoaPlatform.h"
-#include "ARA/Core/ARAView.h"
+#include "../OSXView.h"
+#include "ARA/Core/RenderView.h"
 
 //! @brief
-//! A `ARA::View` implemented with Cocoa `NSView` handle.
+//! Defines a render view that instantiates a AAViewMTL.
 //!
-class OSXView : public ARA::View
+class RenderViewMTL : public ARA::RenderView
 {
     //! @brief
-    //! The view handle.
+    //! The `AAViewMTL*` handle.
     //!
     NSView* mHandle;
     
 public:
     
     //! @brief
-    //! Creates a new view.
+    //! Creates the RenderViewMTL instance.
     //!
-    OSXView(ARA::Application& app, ARA::ViewController& controller, NSView* handle);
+    RenderViewMTL(ARA::Application& app, ARA::RenderViewController& controller);
     
     //! @brief
     //! Returns the NSView handle.
