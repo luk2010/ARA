@@ -16,10 +16,12 @@
 
 #include "ARA/Core/Factory.h"
 #include "ARA/Core/Region.h"
+#include "ARA/Core/RenderView.h"
 
 #include "ARA/Hri/Platform.h"
 #include "ARA/Hri/GPUBuffer.h"
 #include "ARA/Hri/GPUTexture.h"
+#include "ARA/Hri/CommandQueue.h"
 
 ARA_HRI_BEGIN_NS
 
@@ -55,6 +57,26 @@ public:
                                      size_t numMipMapLevels,
                                      const ByteArray& src,
                                      const ImageData& srcDescriptor) = 0;
+    
+    //! @brief
+    //! Creates a RenderPass suitable to draw into the given NativeDrawable.
+    //!
+    virtual RenderPass newRenderPassWithDrawable(NativeDrawable drawable) = 0;
+    
+    //! @brief
+    //! Creates a RenderPass with the given RenderViewDrawable.
+    //!
+    virtual RenderPass newRenderPass(const RenderViewDrawablePtr& drawable);
+    
+    //! @brief
+    //! Creates a new CommandQueue.
+    //!
+    virtual CommandQueuePtr newCommandQueue() = 0;
+    
+    //! @brief
+    //! Returns the maximum number of color attachments.
+    //!
+    virtual size_t maxNumberOfColorAttachments() const = 0;
 };
 
 typedef Ptr < RenderDevice > RenderDevicePtr;

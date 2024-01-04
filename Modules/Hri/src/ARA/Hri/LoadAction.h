@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //! @file
-//!     DeviceMTL/Platform.h
+//!     ARA/Hri/LoadAction.h
 //! @date
-//!     2024/01/02
+//!     2024/01/04
 //! @author
 //!     Luk2010, Atlanti's Corp
 //! @copyright
@@ -11,10 +11,19 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __DEVICEMTL_PLATFORM_H__
-#define __DEVICEMTL_PLATFORM_H__
+#ifndef __ARA_HRI_LOADACTION_H__
+#define __ARA_HRI_LOADACTION_H__
 
-#include <QuartzCore/CAMetalLayer.h>
-#include <Metal/Metal.h>
+#include "ARA/Hri/Platform.h"
 
-#endif
+$ns(ARA, Hri)
+{
+    enum class LoadAction 
+    {
+        DontCare,
+        Load,
+        Clear 
+    };
+}
+
+#endif 

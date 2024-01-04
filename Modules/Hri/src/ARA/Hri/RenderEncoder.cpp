@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //! @file
-//!     DeviceMTL/Platform.h
+//!     ARA/Hri/RenderEncoder.cpp
 //! @date
-//!     2024/01/02
+//!     2024/01/04
 //! @author
 //!     Luk2010, Atlanti's Corp
 //! @copyright
@@ -11,10 +11,13 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __DEVICEMTL_PLATFORM_H__
-#define __DEVICEMTL_PLATFORM_H__
+#include "ARA/Hri/RenderEncoder.h"
 
-#include <QuartzCore/CAMetalLayer.h>
-#include <Metal/Metal.h>
-
-#endif
+$ns(ARA, Hri) 
+{
+    RenderEncoder::RenderEncoder(RenderDevice& dev, const RenderPass& renderPass):
+    CommandEncoder(dev), mRenderPass(renderPass) 
+    {
+        
+    }
+}

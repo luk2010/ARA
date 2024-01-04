@@ -60,6 +60,15 @@
 #include "OSX/Config.h"
 #endif 
 
+#define CONCAT(a, b) a##b
+
+// Helper macro to concatenate namespaces
+#define NAMESPACE_HELPER(prev_ns, curr_ns) prev_ns :: curr_ns
+
+// Main @ns macro
+#define $ns(...) \
+    namespace NAMESPACE_HELPER(__VA_ARGS__)
+
 //! @brief
 //! A macro used to begin the ARA namespace.
 #define ARA_BEGIN_NAMESPACE namespace ARA {
@@ -94,6 +103,7 @@ using Real = ARA_PLATFORM_REAL_T;
 using AtomBool = std::atomic < bool >;
 using Byte = uint8_t;
 using ByteArray = std::vector < Byte >;
+using NativeDrawable = void*;
 
 constexpr auto InvalidIndex = std::string::npos;
 

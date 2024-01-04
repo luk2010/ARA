@@ -74,6 +74,11 @@ public:
     //!
     virtual ARA::PixelFormat pixelFormat() const;
     
+    //! @brief
+    //! Returns a Drawable usable only for implementation purpose.
+    //!
+    virtual ARA::RenderViewDrawablePtr nextDrawable() const;
+    
 protected:
     
     //! @brief

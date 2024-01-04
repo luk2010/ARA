@@ -54,6 +54,21 @@ public:
                                        size_t numMipMapLevels,
                                        const ARA::ByteArray& src,
                                        const ARA::ImageData& srcDescriptor);
+    
+    //! @brief
+    //! Creates a RenderPass suitable to draw into the given NativeDrawable.
+    //!
+    ARA::Hri::RenderPass newRenderPassWithDrawable(ARA::NativeDrawable drawable);
+    
+    //! @brief
+    //! Creates a new CommandQueue.
+    //!
+    ARA::Hri::CommandQueuePtr newCommandQueue();
+    
+    //! @brief
+    //! Returns the maximum number of color attachments.
+    //!
+    size_t maxNumberOfColorAttachments() const;
 };
 
 #endif

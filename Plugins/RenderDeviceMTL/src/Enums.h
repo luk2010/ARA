@@ -20,6 +20,8 @@
 
 #include "ARA/Hri/GPUTextureType.h"
 #include "ARA/Hri/GPUTextureUsage.h"
+#include "ARA/Hri/LoadAction.h"
+#include "ARA/Hri/StoreAction.h"
 
 inline ARA::PixelFormat PixelFormatFromMTL(MTLPixelFormat format)
 {
@@ -145,6 +147,75 @@ inline ARA::Hri::GPUTextureUsage TextureUsageFromMTL(MTLTextureUsage usage)
     rhs.pixelFormatView = (usage & MTLTextureUsagePixelFormatView);
     
     return rhs;
+}
+
+inline MTLLoadAction LoadActionToMTL(ARA::Hri::LoadAction action)
+{
+    switch (action)
+    {
+        case ARA::Hri::LoadAction::DontCare:
+            return MTLLoadActionDontCare;
+            
+        case ARA::Hri::LoadAction::Load:
+            return MTLLoadActionLoad;
+            
+        case ARA::Hri::LoadAction::Clear:
+            return MTLLoadActionClear;
+    }
+}
+
+inline ARA::Hri::LoadAction LoadActionFromMTL(MTLLoadAction action)
+{
+    switch (action)
+    {
+        case MTLLoadActionDontCare:
+            return ARA::Hri::LoadAction::DontCare;
+            
+        case MTLLoadActionLoad:
+            return ARA::Hri::LoadAction::Load;
+            
+        case MTLLoadActionClear:
+            return ARA::Hri::LoadAction::Clear;
+    }
+}
+
+inline MTLStoreAction StoreActionToMTL(ARA::Hri::StoreAction action)
+{
+    switch (action)
+    {
+        case ARA::Hri::StoreAction::DontCare:
+            return MTLStoreActionDontCare;
+            
+        case ARA::Hri::StoreAction::Store:
+            return MTLStoreActionStore;
+            
+        case ARA::Hri::StoreAction::Resolve:
+            return MTLStoreActionMultisampleResolve;
+            
+        case ARA::Hri::StoreAction::StoreAndResolve:
+            return MTLStoreActionStoreAndMultisampleResolve;
+    }
+}
+
+inline ARA::Hri::StoreAction StoreActionFromMTL(MTLStoreAction action)
+{
+    switch (action)
+    {
+        case MTLStoreActionDontCare:
+            return ARA::Hri::StoreAction::DontCare;
+            
+        case MTLStoreActionStore:
+            return ARA::Hri::StoreAction::Store;
+            
+        case MTLStoreActionMultisampleResolve:
+            return ARA::Hri::StoreAction::Resolve;
+            
+        case MTLStoreActionStoreAndMultisampleResolve:
+            return ARA::Hri::StoreAction::StoreAndResolve;
+            
+        default:
+            return ARA::Hri::StoreAction::DontCare;
+    }
 }
 
 #endif

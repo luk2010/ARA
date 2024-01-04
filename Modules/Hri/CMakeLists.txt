@@ -12,8 +12,8 @@ set_property(
 target_include_directories(
     ARAHri
     PUBLIC 
-        ${ARA_HEADERS_PREFIX}
-        ${CMAKE_CURRENT_SOURCE_DIR}/src)
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
+        ${ARA_HEADERS_PREFIX})
 
 target_link_libraries(
     ARAHri

@@ -14,6 +14,21 @@
 #include "RenderView.h"
 #include "AAViewMTL.h"
 
+struct RenderViewDrawableMTL : public ARA::RenderViewDrawable
+{
+    id < CAMetalDrawable > drawable = nil;
+    
+    ARA::NativeDrawable handle() const
+    {
+        return (__bridge ARA::NativeDrawable) drawable;
+    }
+    
+    void present()
+    {
+        [drawable present];
+    }
+};
+
 RenderViewMTL::RenderViewMTL(ARA::Application& app, ARA::RenderViewController& controller):
 ARA::RenderView(app, controller)
 {
@@ -75,6 +90,16 @@ void RenderViewMTL::setBounds(const ARA::Rect2& frame)
 ARA::PixelFormat RenderViewMTL::pixelFormat() const
 {
     return ARA::PixelFormat::RGBA8UnormSRGB;
+}
+
+ARA::RenderViewDrawablePtr RenderViewMTL::nextDrawable() const
+{
+    auto drawable = ARA::MakePtr < RenderViewDrawableMTL >();
+    
+    AAViewMTL* _view = (AAViewMTL*) mHandle;
+    drawable->drawable = [[_view metalLayer] nextDrawable];
+    
+    return drawable;
 }
 
 bool RenderViewMTL::_addChild(const ARA::ViewPtr& child, const ARA::ViewPtr& beforeView)
