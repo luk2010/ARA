@@ -32,6 +32,14 @@ class Factory
 public:
     
     //! @brief
+    //! Destructor.
+    //!
+    ~Factory()
+    {
+        mConstructors.clear();
+    }
+    
+    //! @brief
     //! Adds a new constructor to the factory.
     //!
     void add(const Key& key, const Constructor& constructor)

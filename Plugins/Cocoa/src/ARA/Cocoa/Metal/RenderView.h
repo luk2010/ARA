@@ -69,6 +69,11 @@ public:
     //!
     virtual void setBounds(const ARA::Rect2& rect);
     
+    //! @brief
+    //! Returns the PixelFormat used with this RenderView.
+    //!
+    virtual ARA::PixelFormat pixelFormat() const;
+    
 protected:
     
     //! @brief

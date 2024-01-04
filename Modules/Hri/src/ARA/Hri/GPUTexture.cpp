@@ -1,0 +1,24 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//! @file
+//!     ARA/Hri/GPUTexture.cpp
+//! @date
+//!     2024/01/04
+//! @author
+//!     Luk2010, Atlanti's Corp
+//! @copyright
+//!     Atlanti's Corp - 2023 - 2024
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#include "ARA/Hri/GPUTexture.h"
+
+ARA_HRI_BEGIN_NS
+
+GPUTexture::GPUTexture(RenderDevice& device): 
+GPUResource(device) 
+{
+    
+}
+
+ARA_HRI_END_NS

@@ -16,6 +16,9 @@ project(ARA-SDK
     DESCRIPTION "Another Rendering Abstraction"
     HOMEPAGE_URL "https://github.com/luk2010/ARA") 
 
+option(WITH_METAL "Add support for the Metal API." NO)
+option(WITH_OPENGL "Add support for the OpenGL API." NO)
+
 add_subdirectory(Core)
 
 include_directories(${ARA_HEADERS_PREFIX} ${ARA_MODULES_PREFIX})

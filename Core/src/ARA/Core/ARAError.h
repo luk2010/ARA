@@ -64,6 +64,8 @@ ARA_DECLARE_ERROR(IndexError)
 //! 
 ARA_DECLARE_ERROR(BadCast)
 
+ARA_DECLARE_ERROR(EnumInvalid)
+
 ARA_END_NAMESPACE
 
 #endif /* ARAError_h */

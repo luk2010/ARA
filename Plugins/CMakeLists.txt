@@ -1,3 +1,6 @@
 if (APPLE)
     add_subdirectory(Cocoa)
+    if (WITH_METAL)
+        add_subdirectory(RenderDeviceMTL)
+    endif ()
 endif ()

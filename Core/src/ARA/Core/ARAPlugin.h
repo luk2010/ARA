@@ -93,6 +93,8 @@ public:
     void uninstall();
 };
 
+typedef Ptr < Plugin > PluginPtr;
+
 ARA_END_NAMESPACE
 
 #endif /* ARAPlugin_h */

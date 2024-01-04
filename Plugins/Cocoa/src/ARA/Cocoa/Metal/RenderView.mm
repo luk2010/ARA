@@ -72,6 +72,11 @@ void RenderViewMTL::setBounds(const ARA::Rect2& frame)
     setNeedsLayoutChildren(true);
 }
 
+ARA::PixelFormat RenderViewMTL::pixelFormat() const
+{
+    return ARA::PixelFormat::RGBA8UnormSRGB;
+}
+
 bool RenderViewMTL::_addChild(const ARA::ViewPtr& child, const ARA::ViewPtr& beforeView)
 {
     return false;

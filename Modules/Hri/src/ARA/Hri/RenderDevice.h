@@ -14,7 +14,12 @@
 #ifndef __ARA_HRI_RENDERDEVICE_H__
 #define __ARA_HRI_RENDERDEVICE_H__
 
+#include "ARA/Core/Factory.h"
+#include "ARA/Core/Region.h"
+
 #include "ARA/Hri/Platform.h"
+#include "ARA/Hri/GPUBuffer.h"
+#include "ARA/Hri/GPUTexture.h"
 
 ARA_HRI_BEGIN_NS
 
@@ -34,7 +39,27 @@ public:
     //! Returns the device's name.
     //!
     virtual std::string name() const = 0;
+
+    //! @brief 
+    //! Creates a new GPUBuffer.
+    //! 
+    virtual GPUBufferPtr newBuffer(size_t length, const void* data = NULL) = 0;
+    
+    //! @brief
+    //! Creates a new Texture.
+    //!
+    virtual GPUTexturePtr newTexture(GPUTextureType type, 
+                                     const Region3u& region,
+                                     PixelFormat texPixelFormat,
+                                     size_t numLayers,
+                                     size_t numMipMapLevels,
+                                     const ByteArray& src,
+                                     const ImageData& srcDescriptor) = 0;
 };
+
+typedef Ptr < RenderDevice > RenderDevicePtr;
+typedef std::function < RenderDevicePtr () > RenderDeviceConstructor;
+typedef SingleFactory < std::string, RenderDeviceConstructor > RenderDeviceFactory;
 
 ARA_HRI_END_NS
 

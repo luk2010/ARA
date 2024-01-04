@@ -1,7 +1,4 @@
 
-option(MODULE_OSX_WITH_METAL "ARA.Cocoa.WithMetal: compiles with Metal and provide a RenderView for the Metal API." OFF)
-option(MODULE_OSX_WITH_OPENGL "ARA.Cocoa.WithOpenGL: compiles with OpenGL supports." OFF)
-
 file(GLOB ARA_COCOA_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/ARA/Cocoa/*.mm)
 file(GLOB ARA_COCOA_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/ARA/Cocoa/*.h)
 
@@ -25,7 +22,7 @@ target_link_libraries(
         ${ARA_COREFOUNDATION_LIB} 
         ${ARA_CORETEXT_LIB})
 
-if(MODULE_OSX_WITH_METAL)
+if(WITH_METAL)
 
     file(GLOB ARA_OSX_METAL_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/ARA/Cocoa/Metal/*.h)
     file(GLOB ARA_OSX_METAL_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/ARA/Cocoa/Metal/*.mm)
@@ -51,7 +48,7 @@ if(MODULE_OSX_WITH_METAL)
 
 endif()
 
-if(MODULE_OSX_WITH_OPENGL)
+if(WITH_OPENGL)
 
     file(GLOB ARA_OSX_GL_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/ARA/Cocoa/Gl/*.h)
     file(GLOB ARA_OSX_GL_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/ARA/Cocoa/Gl/*.mm)

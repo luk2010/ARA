@@ -15,6 +15,7 @@
 #define __ARA_CORE_RENDERVIEW_H__
 
 #include "ARA/Core/ARAView.h"
+#include "ARA/Core/PixelFormat.h"
 
 ARA_BEGIN_NAMESPACE
 
@@ -41,6 +42,11 @@ public:
     //! Calls the controller render function.
     //!
     virtual void render();
+
+    //! @brief 
+    //! Returns the PixelFormat used with this RenderView.
+    //! 
+    virtual PixelFormat pixelFormat() const = 0;
 };
 
 typedef Ptr < RenderView > RenderViewPtr;

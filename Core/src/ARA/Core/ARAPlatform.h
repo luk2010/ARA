@@ -26,10 +26,23 @@
 
 #if defined(__APPLE__)
 
+#   include <TargetConditionals.h>
 #   include <CoreFoundation/CoreFoundation.h>
 #   include <CoreGraphics/CoreGraphics.h>
 #   include <objc/objc-runtime.h>
 #   include <dlfcn.h>
+
+#   define ARA_PLATFORM_APPLE   1
+#   define ARA_PLATFORM_WINDOWS 0
+#   define ARA_PLATFORM_LINUX   0
+
+#   if TARGET_OS_OSX
+#   define ARA_PLATFORM_OSX     1
+#   define ARA_PLATFORM_IPHONE  0
+#   elif TARGET_OS_IPHONE
+#   define ARA_PLATFORM_OSX     0
+#   define ARA_PLATFORM_IPHONE  1
+#   endif
 
 #   define ARA_PLATFORM_NAME "APPLE"
 #   define ARA_PLATFORM_REAL_T CGFloat
@@ -42,6 +55,10 @@
 #   define ARA_DYNLIB_EXT ".dylib"
 
 #endif
+
+#if ARA_PLATFORM_OSX
+#include "OSX/Config.h"
+#endif 
 
 //! @brief
 //! A macro used to begin the ARA namespace.
@@ -75,6 +92,8 @@ typedef size_t GlyphIndex;
 
 using Real = ARA_PLATFORM_REAL_T;
 using AtomBool = std::atomic < bool >;
+using Byte = uint8_t;
+using ByteArray = std::vector < Byte >;
 
 constexpr auto InvalidIndex = std::string::npos;
 

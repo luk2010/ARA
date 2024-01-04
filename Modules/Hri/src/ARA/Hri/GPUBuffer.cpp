@@ -1,0 +1,24 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//! @file
+//!     ARA/Hri/GPUBuffer.cpp
+//! @date
+//!     2024/01/02
+//! @author
+//!     Luk2010, Atlanti's Corp
+//! @copyright
+//!     Atlanti's Corp - 2023 - 2024
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#include "ARA/Hri/GPUBuffer.h"
+
+ARA_HRI_BEGIN_NS
+
+GPUBuffer::GPUBuffer(RenderDevice& device): 
+GPUResource(device) 
+{
+    
+}
+
+ARA_HRI_END_NS

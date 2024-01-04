@@ -8,7 +8,7 @@
 #include "ARA/Core/ARAElement.h"
 #include "ARA/Core/ARAApplication.h"
 #include "ARA/Core/ARAWindow.h"
-#include "ARA/Core/ARAPlugin.h"
+#include "ARA/Core/PluginManager.h"
 #include "ARA/Core/ElementStyleManager.h"
 
 #include "ARA/Text/ARATextElement.h"
@@ -174,11 +174,22 @@ protected:
 
 int main(int argc, const char * argv[]) 
 {
-    ARA::Plugin Plugin(ARA_PLATFORM_DEFAULT_PLUGIN_NAME, true);
-    ARA::Application& app = ARA::Application::CreateOrGet();
+    try
+    {
+        ARA::PluginManager::Get().loadOrFind(ARA_PLATFORM_DEFAULT_PLUGIN_NAME, true);
+        ARA::Application& app = ARA::Application::CreateOrGet();
+        
+        ARA::Ptr<MyAppObserver> observer = ARA::MakePtr<MyAppObserver>();
+        app.setObserver(observer);
+        
+        return app.run(argc, argv);
+    }
     
-    ARA::Ptr<MyAppObserver> observer = ARA::MakePtr<MyAppObserver>();
-    app.setObserver(observer);
-    
-    return app.run(argc, argv);
+    catch (const std::exception& error)
+    {
+        std::cout << "Main: error caught with message." << std::endl
+                  << error.what() << std::endl;
+        
+        return EXIT_FAILURE;
+    }
 }

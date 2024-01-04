@@ -6,8 +6,8 @@
         "future": "cpp"
     },
     "cmake.configureArgs": [
-        "-DMODULE_OSX_WITH_METAL=1",
-        "-DMODULE_OSX_WITH_OPENGL=1",
+        "-DWITH_METAL=1",
+        "-DWITH_OPENGL=1",
         "-GXcode"
     ],
     "cmake.generator": "Xcode"
